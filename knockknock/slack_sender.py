@@ -76,6 +76,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 dump['text'] = '\n'.join(contents)
                 dump['icon_emoji'] = ':skull_and_crossbones:'
                 requests.post(webhook_url, json.dumps(dump))
+                raise ex
 
         return wrapper_sender
 
