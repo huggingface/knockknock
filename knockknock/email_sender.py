@@ -60,6 +60,7 @@ def email_sender(recipient_email: str, sender_email: str = None):
                             "Traceback",
                             '%s' % traceback.format_exc()]
                 yag_sender.send(recipient_email, 'Training has crashed ☠️', contents)
+                raise ex
 
         return wrapper_sender
 
