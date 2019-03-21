@@ -37,7 +37,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             contents = ['Your training has started 🎬',
                         'Machine name: %s' % socket.gethostname(),
                         'Main call: %s' % func.__name__,
-                        'Starting date: {start_time.strftime(DATE_FORMAT)}']
+                        'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
             contents.append(' '.join(user_mentions))
             dump['text'] = '\n'.join(contents)
             dump['icon_emoji'] = ':clapper:'
