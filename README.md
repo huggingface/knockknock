@@ -26,7 +26,7 @@ The service relies on [Yagmail](https://github.com/kootenpv/yagmail) a GMAIL/SMT
 ```python
 from knockknock import email_sender
 
-@email_sender(recipient_email: "<your_email@address.com>", sender_email: "<grandma's_email@gmail.com>")
+@email_sender(recipient_email="<your_email@address.com>", sender_email="<grandma's_email@gmail.com>")
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
