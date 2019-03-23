@@ -17,7 +17,7 @@ This code has only been tested with Python 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call.
 
-There are currently two ways to setup notifications: email and Slack.
+There are currently three ways to setup notifications: email, Slack and Telegram.
 
 ### Email
 
@@ -51,3 +51,19 @@ def train_your_nicest_model(your_nicest_parameters):
 ```
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_id>, <grandma's_slack_id>]`.
+
+### Telegram
+
+You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
+
+Telegram bots are shy and can't send the first message so you'll have to do the first step. By sending the first message, you'll be able to get the `chat_id` required (identification of your messaging room) by visiting `https://api.telegram.org/bot<YourBOTToken>/getUpdates` and get the `int` under the key `message['chat']['id']`.
+
+```python
+from knockknock import telegram_sender
+
+CHAT_ID: int = <your_messaging_room_id>
+@telegram_sender(token="<your_api_token>", chat_id=CHAT_ID)
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+```
