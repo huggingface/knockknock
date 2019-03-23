@@ -10,8 +10,8 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%d"
 
 def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     """
-    Email sender wrapper: execute func, send an email with the end status
-    (sucessfully finished or crashed) at the end. Also send an email before
+    Slack sender wrapper: execute func, send a Slack notification with the end status
+    (sucessfully finished or crashed) at the end. Also send a Slack notification before
     executing func.
 
     `webhook_url`: str
@@ -34,9 +34,11 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
         def wrapper_sender(*args, **kwargs):
 
             start_time = datetime.datetime.now()
+            host_name = socket.gethostname()
+            func_name = func.__name__
             contents = ['Your training has started 🎬',
-                        'Machine name: %s' % socket.gethostname(),
-                        'Main call: %s' % func.__name__,
+                        'Machine name: %s' % host_name,
+                        'Main call: %s' % func_name,
                         'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
             contents.append(' '.join(user_mentions))
             dump['text'] = '\n'.join(contents)
@@ -48,8 +50,8 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 end_time = datetime.datetime.now()
                 elapsed_time = end_time - start_time
                 contents = ["Your training is complete 🎉",
-                            'Machine name: %s' % socket.gethostname(),
-                            'Main call: %s' % func.__name__,
+                            'Machine name: %s' % host_name,
+                            'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT),
                             'End date: %s' % end_time.strftime(DATE_FORMAT),
                             'Training duration: %s' % str(elapsed_time)]
@@ -63,14 +65,14 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 end_time = datetime.datetime.now()
                 elapsed_time = end_time - start_time
                 contents = ["Your training has crashed ☠️",
-                            'Machine name: %s' % socket.gethostname(),
-                            'Main call: %s' % func.__name__,
+                            'Machine name: %s' % host_name,
+                            'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT),
                             'Crash date: %s' % end_time.strftime(DATE_FORMAT),
                             'Crashed training duration: %s\n\n' % str(elapsed_time),
                             "Here's the error:",
                             '%s\n\n' % ex,
-                            "Traceback",
+                            "Traceback:",
                             '%s' % traceback.format_exc()]
                 contents.append(' '.join(user_mentions))
                 dump['text'] = '\n'.join(contents)
