@@ -11,6 +11,8 @@ Install with `pip` or equivalent.
 pip install knockknock
 ```
 
+(For conda users, you can use `conda install -c victorsanh knockknock`.)
+
 This code has only been tested with Python 3.6.
 
 ## Usage
