@@ -4,14 +4,14 @@ import functools
 import socket
 import telegram
 
-DATE_FORMAT = "%Y-%m-%d %H:%M:%d"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def telegram_sender(token: str, chat_id: int):
     """
     Telegram sender wrapper: execute func, send a Telegram message with the end status
     (sucessfully finished or crashed) at the end. Also send a Telegram message before
     executing func.
-    
+
     `token`: str
         The API access TOKEN required to use the Telegram API.
         Visit https://core.telegram.org/bots#6-botfather to obtain your TOKEN.

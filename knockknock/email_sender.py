@@ -4,7 +4,7 @@ import functools
 import socket
 import yagmail
 
-DATE_FORMAT = "%Y-%m-%d %H:%M:%d"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def email_sender(recipient_email: str, sender_email: str = None):
     """

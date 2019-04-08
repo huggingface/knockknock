@@ -6,7 +6,7 @@ import json
 import socket
 import requests
 
-DATE_FORMAT = "%Y-%m-%d %H:%M:%d"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     """
