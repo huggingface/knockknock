@@ -25,6 +25,9 @@ There are currently three ways to setup notifications: email, Slack and Telegram
 
 The service relies on [Yagmail](https://github.com/kootenpv/yagmail) a GMAIL/SMTP client. You'll need a gmail email address to use it (you can setup one [here](https://accounts.google.com), it's free). I recommend creating a new one (rather than your usual one) since you'll have to modify the account's security settings to allow the Python library to access it by [Turning on less secure apps](https://devanswers.co/allow-less-secure-apps-access-gmail-account/).
 
+
+#### Python
+
 ```python
 from knockknock import email_sender
 
@@ -34,6 +37,15 @@ def train_your_nicest_model(your_nicest_parameters):
     time.sleep(10000)
 ```
 
+#### Command-line
+
+```bash
+knockknock email \
+    --recipient-email <your_email@address.com> \
+    --sender-email <grandma's_email@gmail.com> \
+    sleep 10
+```
+
 If `sender_email` is not specified, then `recipient_email` will be also used for sending.
 
 Note that launching this will asks you for the sender's email password. It will be safely stored in the system keyring service through the [`keyring` Python library](https://pypi.org/project/keyring/).
@@ -41,6 +53,8 @@ Note that launching this will asks you for the sender's email password. It will 
 ### Slack
 
 Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [weebhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your [user id](https://api.slack.com/methods/users.identity) (if you want to tag yourself or someone else).
+
+#### Python
 
 ```python
 from knockknock import slack_sender
@@ -54,11 +68,24 @@ def train_your_nicest_model(your_nicest_parameters):
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_id>, <grandma's_slack_id>]`.
 
+#### Command-line
+
+```bash
+knockknock slack \
+    --webhook-url <webhook_url_to_your_slack_room> \
+    --channel <your_favorite_slack_channel> \
+    sleep 10
+```
+
+You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
+
 ### Telegram
 
 You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
 
 Telegram bots are shy and can't send the first message so you'll have to do the first step. By sending the first message, you'll be able to get the `chat_id` required (identification of your messaging room) by visiting `https://api.telegram.org/bot<YourBOTToken>/getUpdates` and get the `int` under the key `message['chat']['id']`.
+
+#### Python
 
 ```python
 from knockknock import telegram_sender
@@ -68,4 +95,13 @@ CHAT_ID: int = <your_messaging_room_id>
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
+```
+
+#### Command-line
+
+```bash
+knockknock telegram \
+    --token <your_api_token> \
+    --chat-id <your_messaging_room_id> \
+    sleep 10
 ```
