@@ -32,7 +32,7 @@ def main():
     slack_parser.add_argument(
         "--channel", type=str, required=True, help="The slack room to log.")
     slack_parser.add_argument(
-        "--user-mentions", type=lambda s: s.split(","), required=False,
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user ids to notify, as comma seperated list.")
     slack_parser.set_defaults(sender_func=slack_sender)
 
