@@ -55,6 +55,13 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT),
                             'End date: %s' % end_time.strftime(DATE_FORMAT),
                             'Training duration: %s' % str(elapsed_time)]
+
+                try:
+                    str_value = str(value)
+                    contents.append('Main call returned value: %s'% str_value)
+                except:
+                    contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
+
                 contents.append(' '.join(user_mentions))
                 dump['text'] = '\n'.join(contents)
                 dump['icon_emoji'] = ':tada:'

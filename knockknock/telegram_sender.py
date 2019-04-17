@@ -47,6 +47,13 @@ def telegram_sender(token: str, chat_id: int):
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT),
                             'End date: %s' % end_time.strftime(DATE_FORMAT),
                             'Training duration: %s' % str(elapsed_time)]
+
+                try:
+                    str_value = str(value)
+                    contents.append('Main call returned value: %s'% str_value)
+                except:
+                    contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
+
                 text = '\n'.join(contents)
                 bot.send_message(chat_id=chat_id, text=text)
                 return value

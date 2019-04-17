@@ -45,6 +45,14 @@ def email_sender(recipient_email: str, sender_email: str = None):
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT),
                             'End date: %s' % end_time.strftime(DATE_FORMAT),
                             'Training duration: %s' % str(elapsed_time)]
+
+
+                try:
+                    str_value = str(value)
+                    contents.append('Main call returned value: %s'% str_value)
+                except:
+                    contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
+
                 yag_sender.send(recipient_email, 'Training has sucessfully finished 🎉', contents)
                 return value
 
