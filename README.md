@@ -17,7 +17,7 @@ This code has only been tested with Python 3.6.
 
 ## Usage
 
-The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call.
+The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
 There are currently three ways to setup notifications: email, Slack and Telegram.
 
@@ -35,6 +35,7 @@ from knockknock import email_sender
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
 ```
 
 #### Command-line
@@ -64,6 +65,7 @@ webhook_url = "<webhook_url_to_your_slack_room>"
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
 ```
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_id>, <grandma's_slack_id>]`.
@@ -95,6 +97,7 @@ CHAT_ID: int = <your_messaging_room_id>
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
 ```
 
 #### Command-line
