@@ -1,4 +1,5 @@
 from typing import List
+import os
 import datetime
 import traceback
 import functools
@@ -36,6 +37,13 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             start_time = datetime.datetime.now()
             host_name = socket.gethostname()
             func_name = func.__name__
+
+            # Handling distributed training edge case.
+            # In PyTorch, the launch of `torch.distributed.launch` sets up a RANK environment variable for each process.
+            # This can be used to detect the master process.
+            # See https://github.com/pytorch/pytorch/blob/master/torch/distributed/launch.py#L211
+            if 'RANK' in os.environ: host_name += ' - RANK: %s' % os.environ['RANK']
+
             contents = ['Your training has started 🎬',
                         'Machine name: %s' % host_name,
                         'Main call: %s' % func_name,
