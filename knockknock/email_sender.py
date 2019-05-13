@@ -35,33 +35,41 @@ def email_sender(recipient_email: str, sender_email: str = None):
             # In PyTorch, the launch of `torch.distributed.launch` sets up a RANK environment variable for each process.
             # This can be used to detect the master process.
             # See https://github.com/pytorch/pytorch/blob/master/torch/distributed/launch.py#L211
-            if 'RANK' in os.environ: host_name += ' - RANK: %s' % os.environ['RANK']
+            # Except for errors, only the master process will send notifications.
+            if 'RANK' in os.environ:
+                master_process = (int(os.environ['RANK']) == 0)
+                host_name += ' - RANK: %s' % os.environ['RANK']
+            else:
+                master_process = True
 
-            contents = ['Your training has started.',
-                        'Machine name: %s' % host_name,
-                        'Main call: %s' % func_name,
-                        'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-            yag_sender.send(recipient_email, 'Training has started 🎬', contents)
+            if master_process:
+                contents = ['Your training has started.',
+                            'Machine name: %s' % host_name,
+                            'Main call: %s' % func_name,
+                            'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
+                yag_sender.send(recipient_email, 'Training has started 🎬', contents)
 
             try:
                 value = func(*args, **kwargs)
-                end_time = datetime.datetime.now()
-                elapsed_time = end_time - start_time
-                contents = ["Your training is complete.",
-                            'Machine name: %s' % host_name,
-                            'Main call: %s' % func_name,
-                            'Starting date: %s' % start_time.strftime(DATE_FORMAT),
-                            'End date: %s' % end_time.strftime(DATE_FORMAT),
-                            'Training duration: %s' % str(elapsed_time)]
 
+                if master_process:
+                    end_time = datetime.datetime.now()
+                    elapsed_time = end_time - start_time
+                    contents = ["Your training is complete.",
+                                'Machine name: %s' % host_name,
+                                'Main call: %s' % func_name,
+                                'Starting date: %s' % start_time.strftime(DATE_FORMAT),
+                                'End date: %s' % end_time.strftime(DATE_FORMAT),
+                                'Training duration: %s' % str(elapsed_time)]
 
-                try:
-                    str_value = str(value)
-                    contents.append('Main call returned value: %s'% str_value)
-                except:
-                    contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
+                    try:
+                        str_value = str(value)
+                        contents.append('Main call returned value: %s'% str_value)
+                    except:
+                        contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                yag_sender.send(recipient_email, 'Training has sucessfully finished 🎉', contents)
+                    yag_sender.send(recipient_email, 'Training has sucessfully finished 🎉', contents)
+
                 return value
 
             except Exception as ex:
