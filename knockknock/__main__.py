@@ -58,8 +58,7 @@ def main():
 
     verbose = args.pop("verbose")
     def run_func(): return subprocess.run(remaining_args, check=True)
-    run_func.__name__ = " ".join(
-        remaining_args) if verbose else remaining_args[0]
+    run_func.__name__ = " ".join(remaining_args) if verbose else remaining_args[0]
 
     sender_func(**args)(run_func)()
 
