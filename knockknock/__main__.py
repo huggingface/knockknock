@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender
+from knockknock import email_sender, slack_sender, telegram_sender, teams_sender
 
 
 def main():
@@ -47,6 +47,17 @@ def main():
         help="Your chat room id with your notification BOT.")
     telegram_parser.set_defaults(sender_func=telegram_sender)
 
+    teams_parser = subparsers.add_parser(
+        name="teams", description="Send a teams message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    teams_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your teams channel.")
+    teams_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user ids to notify, as comma seperated list.")
+    teams_parser.set_defaults(sender_func=teams_sender)
+
     args, remaining_args = parser.parse_known_args()
     args = vars(args)
 
@@ -57,8 +68,10 @@ def main():
         exit(1)
 
     verbose = args.pop("verbose")
+
     def run_func(): return subprocess.run(remaining_args, check=True)
-    run_func.__name__ = " ".join(remaining_args) if verbose else remaining_args[0]
+    run_func.__name__ = " ".join(
+        remaining_args) if verbose else remaining_args[0]
 
     sender_func(**args)(run_func)()
 
