@@ -108,6 +108,35 @@ knockknock telegram \
     --chat-id <your_messaging_room_id> \
     sleep 10
 ```
+### Microsoft Teams
+
+You can also use Microsoft Teams to get notifications. You'll have to get your Slack room [weebhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using)
+
+
+
+#### Python
+
+```python
+from knockknock import telegram_sender
+
+CHAT_ID: int = <your_messaging_room_id>
+@teams_sender(token="<webhook_url_to_your_teams_channel>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock teams \
+    --webhook-url <webhook_url_to_your_teams_channel> \
+    sleep 10
+```
+
+
+
 
 ## Note on distributed training
 
