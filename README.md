@@ -53,7 +53,7 @@ Note that launching this will asks you for the sender's email password. It will 
 
 ### Slack
 
-Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [weebhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your [user id](https://api.slack.com/methods/users.identity) (if you want to tag yourself or someone else).
+Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [webhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your [user id](https://api.slack.com/methods/users.identity) (if you want to tag yourself or someone else).
 
 #### Python
 
@@ -110,7 +110,7 @@ knockknock telegram \
 ```
 ### Microsoft Teams
 
-You can also use Microsoft Teams to get notifications. You'll have to get your Slack room [weebhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using)
+You can also use Microsoft Teams to get notifications. You'll have to get your Team Channel [webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using)
 
 
 
