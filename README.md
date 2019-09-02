@@ -19,7 +19,7 @@ This code has only been tested with Python 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently three ways to setup notifications: email, Slack and Telegram.
+There are currently four ways to setup notifications: email, Slack, Telegram and Microsoft Teams.
 
 ### Email
 
