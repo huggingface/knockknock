@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender, teams_sender
+from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender
 
 
 def main():
@@ -57,6 +57,22 @@ def main():
         "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user ids to notify, as comma seperated list.")
     teams_parser.set_defaults(sender_func=teams_sender)
+
+    twilio_parser = subparsers.add_parser(
+        name="twilio", description="Send SMS using the Twilio API")
+    twilio_parser.add_argument(
+        "--account-sid", type=str, required=True,
+        help="The account sid to access your Twilio account.")
+    twilio_parser.add_argument(
+        "--auth-token", type=str, required=True,
+        help="The auth token to access your Twilio account.")
+    twilio_parser.add_argument(
+        "--recipient-number", type=str, required=True,
+        help="Phone number of the recipient")
+    twilio_parser.add_argument(
+        "--sender-number", type=str, required=True,
+        help="Phone number of the sender")
+    teams_parser.set_defaults(sender_func=sms_sender)
 
     args, remaining_args = parser.parse_known_args()
     args = vars(args)
