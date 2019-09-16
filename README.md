@@ -117,7 +117,7 @@ Thanks to @noklam, you can also use Microsoft Teams to get notifications. You'll
 #### Python
 
 ```python
-from knockknock import telegram_sender
+from knockknock import teams_sender
 
 CHAT_ID: int = <your_messaging_room_id>
 @teams_sender(token="<webhook_url_to_your_teams_channel>")
