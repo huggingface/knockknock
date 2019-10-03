@@ -1,4 +1,5 @@
 # Knock Knock
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/knockknock)](https://pepy.tech/project/knockknock) [![Downloads](https://pepy.tech/badge/knockknock/month)](https://pepy.tech/project/knockknock/month) [![GitHub stars](https://img.shields.io/github/stars/huggingface/knockknock.svg?style=social&label=Star&maxAge=2592000)](https://github.com/huggingface/knockknock/stargazers/)
 
 A small library to get a notification when your training is complete or when it crashes during the process with two additional lines of code.
 
