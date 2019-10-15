@@ -12,7 +12,7 @@ def main():
     subparsers = parser.add_subparsers()
 
     email_parser = subparsers.add_parser(
-        name="email", description="Send a Slack message before and after function " +
+        name="email", description="Send an email before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
     email_parser.add_argument(
         "--recipient-email", type=str, required=True,
