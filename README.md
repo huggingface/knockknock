@@ -149,7 +149,7 @@ from knockknock import sms_sender
 
 ACCOUNT_SID: str = "<your_account_sid>"
 AUTH_TOKEN: str = "<your_auth_token>"
-@teams_sender(account_sid=ACCOUNT_SID, auth_token=AUTH_TOKEN, recipient_number="<recipient's_numbder>", sender_number="<sender's_number>")
+@sms_sender(account_sid=ACCOUNT_SID, auth_token=AUTH_TOKEN, recipient_number="<recipient's_number>", sender_number="<sender's_number>")
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10)
