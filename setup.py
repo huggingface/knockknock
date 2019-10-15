@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='knockknock',
-    version='0.1.3',
+    version='0.1.4',
     description='Be notified when your training is complete with only two additional lines of code',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
@@ -23,7 +23,8 @@ setup(
         'yagmail>=0.11.214',
         'keyring',
         'python-telegram-bot',
-        'requests'
+        'requests',
+        'twilio'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',
