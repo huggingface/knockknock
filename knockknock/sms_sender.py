@@ -3,12 +3,13 @@ import datetime
 import traceback
 import functools
 import socket
-import twilio
+from twilio.rest import Client
+
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def sms_sender(account_sid: str, auth_token: str, recipient_number: str, sender_number: str):
-    client = twilio.rest.Client(account_sid, auth_token)
+    client = Client(account_sid, auth_token)
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
