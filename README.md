@@ -20,12 +20,12 @@ This code has only been tested with Python 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently four ways to setup notifications: email, Slack, Telegram and Microsoft Teams.
+There are currently *five* ways to setup notifications: email, Slack, Telegram, Microsoft Teams and text message (through Twilio).
+
 
 ### Email
 
 The service relies on [Yagmail](https://github.com/kootenpv/yagmail) a GMAIL/SMTP client. You'll need a gmail email address to use it (you can setup one [here](https://accounts.google.com), it's free). I recommend creating a new one (rather than your usual one) since you'll have to modify the account's security settings to allow the Python library to access it by [Turning on less secure apps](https://devanswers.co/allow-less-secure-apps-access-gmail-account/).
-
 
 #### Python
 
@@ -51,6 +51,7 @@ knockknock email \
 If `sender_email` is not specified, then `recipient_email` will be also used for sending.
 
 Note that launching this will asks you for the sender's email password. It will be safely stored in the system keyring service through the [`keyring` Python library](https://pypi.org/project/keyring/).
+
 
 ### Slack
 
@@ -82,6 +83,7 @@ knockknock slack \
 
 You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
 
+
 ### Telegram
 
 You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
@@ -109,18 +111,17 @@ knockknock telegram \
     --chat-id <your_messaging_room_id> \
     sleep 10
 ```
+
+
 ### Microsoft Teams
 
-Thanks to @noklam, you can also use Microsoft Teams to get notifications. You'll have to get your Team Channel [webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using).
-
-
+Thanks to [@noklam](https://github.com/noklam), you can also use Microsoft Teams to get notifications. You'll have to get your Team Channel [webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using).
 
 #### Python
 
 ```python
 from knockknock import teams_sender
 
-CHAT_ID: int = <your_messaging_room_id>
 @teams_sender(token="<webhook_url_to_your_teams_channel>")
 def train_your_nicest_model(your_nicest_parameters):
     import time
@@ -136,7 +137,37 @@ knockknock teams \
     sleep 10
 ```
 
+You can also specify an optional argument to tag specific people: `user_mentions=[<your_teams_id>, <grandma's_teams_id>]`.
 
+
+### Text Message (SMS)
+
+Thanks to [@abhishekkrthakur](https://github.com/abhishekkrthakur), you can use Twilio to send text message notifications. You'll have to setup a [Twilio](www.twilio.com) account [here](https://www.twilio.com/try-twilio), which is paid service with competitive prices: for instance in the US, getting a new number costs and sending one text message through this service respectively cost $1.00 and $0.0075. You'll need to get (a) a phone number, (b) your [account SID](https://www.twilio.com/docs/glossary/what-is-a-sid) and (c) your [authentification token](https://www.twilio.com/docs/iam/access-tokens). Some detail [here](https://www.twilio.com/docs/iam/api/account).
+
+#### Python
+
+```python
+from knockknock import sms_sender
+
+ACCOUNT_SID: str = "<your_account_sid>"
+AUTH_TOKEN: str = "<your_auth_token>"
+@teams_sender(account_sid=ACCOUNT_SID, auth_token=AUTH_TOKEN, recipient_number="<recipient's_numbder>", sender_number="<sender's_number>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock sms \
+    --account-sid <your_account_sid> \
+    --auth-token <your_account_auth_token> \
+    --recipient-number <recipient_number> \
+    --sender-number <sender_number>
+    sleep 10
+```
 
 
 ## Note on distributed training
