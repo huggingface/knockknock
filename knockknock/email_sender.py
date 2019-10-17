@@ -7,20 +7,21 @@ import yagmail
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-def email_sender(recipient_email: str, sender_email: str = None):
+def email_sender(recipient_email_list: list, sender_email: str = None):
     """
     Email sender wrapper: execute func, send an email with the end status
     (sucessfully finished or crashed) at the end. Also send an email before
     executing func.
 
-    `recipient_email`: str
-        The email address to notify.
+    `recipient_email_list`: list
+        A list of email addresses to notify.
     `sender_email`: str (default=None)
         The email adress to send the messages. If None, use the same
-        address as `recipient_email`.
+        address as the first recipient email in `recipient_email_list`
+        if length of `recipient_email_list` is more than 0.
     """
-    if sender_email is None:
-        sender_email = recipient_email
+    if sender_email is None and len(recipient_email_list) > 0:
+        sender_email = recipient_email_list[0]
     yag_sender = yagmail.SMTP(sender_email)
 
     def decorator_sender(func):
@@ -47,8 +48,9 @@ def email_sender(recipient_email: str, sender_email: str = None):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                yag_sender.send(recipient_email, 'Training has started 🎬', contents)
-
+                for i in range(len(recipient_email_list)):
+                    current_recipient = recipient_email_list[i]
+                    yag_sender.send(current_recipient, 'Training has started 🎬', contents)
             try:
                 value = func(*args, **kwargs)
 
@@ -68,7 +70,9 @@ def email_sender(recipient_email: str, sender_email: str = None):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    yag_sender.send(recipient_email, 'Training has sucessfully finished 🎉', contents)
+                    for i in range(len(recipient_email_list)):
+                        current_recipient = recipient_email_list[i]
+                        yag_sender.send(current_recipient, 'Training has sucessfully finished 🎉', contents)
 
                 return value
 
@@ -85,7 +89,9 @@ def email_sender(recipient_email: str, sender_email: str = None):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                yag_sender.send(recipient_email, 'Training has crashed ☠️', contents)
+                for i in range(len(recipient_email_list)):
+                    current_recipient = recipient_email_list[i]
+                    yag_sender.send(current_recipient, 'Training has crashed ☠️', contents)
                 raise ex
 
         return wrapper_sender
