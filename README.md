@@ -167,6 +167,30 @@ knockknock sms \
     sleep 10
 ```
 
+### Discord
+
+You can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
+
+#### Python
+
+```python
+from knockknock import discord_sender
+
+webhook_url = "<webhook_url_to_your_discord_channel>"
+@discord_sender(webhook_url=webhook_url")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock discord \
+    --webhook-url <webhook_url_to_your_discord_channel> \
+    sleep 10
+```
 
 ## Note on distributed training
 
