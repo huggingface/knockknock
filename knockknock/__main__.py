@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender
+from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender
 
 
 def main():
@@ -10,6 +10,14 @@ def main():
     parser.add_argument("--verbose", required=False, action="store_true",
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
+
+    discord_parser = subparsers.add_parser(
+        name="discord", description="Send a Discord message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    discord_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your Discord server/channel.")
+    discord_parser.set_defaults(sender_func=discord_sender)
 
     email_parser = subparsers.add_parser(
         name="email", description="Send an email before and after function " +
