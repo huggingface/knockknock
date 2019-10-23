@@ -30,7 +30,7 @@ The service relies on [Yagmail](https://github.com/kootenpv/yagmail) a GMAIL/SMT
 ```python
 from knockknock import email_sender
 
-@email_sender(recipient_email_list=["<your_email@address.com>", "<your_second_email@address.com>"], sender_email="<grandma's_email@gmail.com>")
+@email_sender(recipient_emails=["<your_email@address.com>", "<your_second_email@address.com>"], sender_email="<grandma's_email@gmail.com>")
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
@@ -41,7 +41,7 @@ def train_your_nicest_model(your_nicest_parameters):
 
 ```bash
 knockknock email \
-    --recipient-email-list [<your_email@address.com>, <your_second_email@address.com>] \
+    --recipient-emails [<your_email@address.com>, <your_second_email@address.com>] \
     --sender-email <grandma's_email@gmail.com> \
     sleep 10
 ```
