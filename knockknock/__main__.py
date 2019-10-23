@@ -24,7 +24,7 @@ def main():
         "execution, with start and end status (sucessfully or crashed).")
     email_parser.add_argument(
         "--recipient-emails", type=lambda s: s.split(","), required=True,
-        help="The email addresses to notify. as comma separated list.")
+        help="The email addresses to notify, as comma separated list.")
     email_parser.add_argument(
         "--sender-email", type=str, required=False,
         help="The email adress to send the messages." +
