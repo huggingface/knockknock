@@ -41,7 +41,7 @@ def train_your_nicest_model(your_nicest_parameters):
 
 ```bash
 knockknock email \
-    --recipient-emails [<your_email@address.com>, <your_second_email@address.com>] \
+    --recipient-emails <your_email@address.com>,<your_second_email@address.com> \
     --sender-email <grandma's_email@gmail.com> \
     sleep 10
 ```
