@@ -15,12 +15,12 @@ def main():
         name="email", description="Send an email before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
     email_parser.add_argument(
-        "--recipient-email", type=str, required=True,
-        help="The email address to notify.")
+        "--recipient-email-list", type=list, required=True,
+        help="The email addresses to notify.")
     email_parser.add_argument(
         "--sender-email", type=str, required=False,
         help="The email adress to send the messages." +
-        "(default: use the same address as recipient-email)")
+        "(default: use the same address as the first email in `recipient-email-list`)")
     email_parser.set_defaults(sender_func=email_sender)
 
     slack_parser = subparsers.add_parser(
