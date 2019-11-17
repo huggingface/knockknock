@@ -192,6 +192,22 @@ knockknock discord \
     sleep 10
 ```
 
+### Desktop Notification
+#### Python
+
+```python
+from knockknock import desktop_sender
+
+@desktop_sender(title="my function")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {"loss":0.9}
+```
+#### Command Line
+```bash
+knockknock desktop --title command sleep 2
+```
 ## Note on distributed training
 
 When using distributed training, a GPU is bound to its process using the local rank variable. Since knockknock works at the process level, if you are using 8 GPUs, you would get 8 notifications at the beginning and 8 notifications at the end... To circumvent that, except for errors, only the master process is allowed to send notifications so that you receive only one notification at the beginning and one notification at the end.
