@@ -1,5 +1,5 @@
 # Knock Knock
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/knockknock)](https://pepy.tech/project/knockknock) [![Downloads](https://pepy.tech/badge/knockknock/month)](https://pepy.tech/project/knockknock/month) [![GitHub stars](https://img.shields.io/github/stars/huggingface/knockknock.svg?style=social&label=Star&maxAge=2592000)](https://github.com/huggingface/knockknock/stargazers/)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/knockknock)](https://pepy.tech/project/knockknock) [![Downloads](https://pepy.tech/badge/knockknock/month)](https://pepy.tech/project/knockknock/month) [![GitHub stars](https://img.shields.io/github/stars/huggingface/knockknock.svg?style=social&label=Star&maxAge=1000)](https://github.com/huggingface/knockknock/stargazers/)
 
 A small library to get a notification when your training is complete or when it crashes during the process with two additional lines of code.
 
@@ -18,8 +18,16 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *five* ways to setup notifications: email, Slack, Telegram, Microsoft Teams and text message (through Twilio).
+There are currently *six* ways to setup notifications:
 
+| Platform | External Contributors |
+|:---:|:---:|
+| [email](#email) | - |
+| [Slack](#slack) | - |
+| [Telegram](#telegram) | - |
+| [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) |
+| [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) |
+| [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
 
 ### Email
 
@@ -169,7 +177,7 @@ knockknock sms \
 
 ### Discord
 
-You can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
+Thanks to [@watkinsm](https://github.com/watkinsm), you can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
 
 #### Python
 
