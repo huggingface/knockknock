@@ -12,11 +12,12 @@ def main():
     subparsers = parser.add_subparsers()
 
     ## Desktop
-    desktop_parser=subparsers.add_parser(
-        name="desktop",description="Send a desktop notification before and after function "+
+    desktop_parser = subparsers.add_parser(
+        name="desktop",description="Send a desktop notification before and after function " +
         "execution, with start and end status (successfully or crashed).")
-    desktop_parser.add_argument("--title",type=str,required=False,help="The title of the notification, default to knockknock")
-    desktop_parser.set_defaults(sender_func=desktop_parser)
+    desktop_parser.add_argument("--title", type=str, required=False,
+        help="The title of the notification, default to knockknock")
+    desktop_parser.set_defaults(sender_func=desktop_sender)
     
     ## Discord
     discord_parser = subparsers.add_parser(
