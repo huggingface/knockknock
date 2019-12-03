@@ -18,7 +18,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *six* ways to setup notifications:
+There are currently *seven* ways to setup notifications:
 
 | Platform | External Contributors |
 |:---:|:---:|
@@ -28,6 +28,7 @@ There are currently *six* ways to setup notifications:
 | [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) |
 | [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) |
 | [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
+| [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) |
 
 ### Email
 
