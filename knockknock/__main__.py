@@ -11,6 +11,7 @@ def main():
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
 
+    ## Discord
     discord_parser = subparsers.add_parser(
         name="discord", description="Send a Discord message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -19,6 +20,7 @@ def main():
         help="The webhook URL to access your Discord server/channel.")
     discord_parser.set_defaults(sender_func=discord_sender)
 
+    ## Email
     email_parser = subparsers.add_parser(
         name="email", description="Send an email before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -31,6 +33,7 @@ def main():
         "(default: use the same address as the first email in `recipient-emails`)")
     email_parser.set_defaults(sender_func=email_sender)
 
+    ## Slack
     slack_parser = subparsers.add_parser(
         name="slack", description="Send a Slack message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -44,6 +47,7 @@ def main():
         help="Optional user ids to notify, as comma seperated list.")
     slack_parser.set_defaults(sender_func=slack_sender)
 
+    ## Telegram
     telegram_parser = subparsers.add_parser(
         name="telegram", description="Send a Telegram message before and after " +
         "function execution, with start and end status (sucessfully or crashed).")
@@ -55,6 +59,7 @@ def main():
         help="Your chat room id with your notification BOT.")
     telegram_parser.set_defaults(sender_func=telegram_sender)
 
+    ## Teams
     teams_parser = subparsers.add_parser(
         name="teams", description="Send a teams message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -66,6 +71,7 @@ def main():
         help="Optional user ids to notify, as comma seperated list.")
     teams_parser.set_defaults(sender_func=teams_sender)
 
+    ## SMS
     sms_parser = subparsers.add_parser(
         name="sms", description="Send an SMS using the Twilio API")
     sms_parser.add_argument(
