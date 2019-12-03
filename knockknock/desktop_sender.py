@@ -9,8 +9,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 def desktop_sender(title:str="knockknock"):
     
     def show_notification(text:str,title:str):
-        #print(f"showing notification {text},{title}") For testing activate that line
-        subprocess.run(["sh","-c",f"osascript -e 'display notification \"{text}\" with title \"{title}\"'"]) # For testing, comment out that line and use print
+        subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -37,7 +36,7 @@ def desktop_sender(title:str="knockknock"):
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
                 text = '\n'.join(contents)
-                show_notification(text,title)
+                show_notification(text, title)
 
             try:
                 value = func(*args, **kwargs)
@@ -59,7 +58,7 @@ def desktop_sender(title:str="knockknock"):
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
                     text = '\n'.join(contents)
-                    show_notification(text,title)
+                    show_notification(text, title)
 
                 return value
 
@@ -77,7 +76,7 @@ def desktop_sender(title:str="knockknock"):
                             "Traceback:",
                             '%s' % traceback.format_exc()]
                 text = '\n'.join(contents)
-                show_notification(text,title)
+                show_notification(text, title)
                 raise ex
 
         return wrapper_sender
