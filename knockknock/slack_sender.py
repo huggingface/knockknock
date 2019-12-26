@@ -99,6 +99,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 raise ex
 
         def _error_message(ex, func_name, host_name, notification, start_time):
+            """Uses Slack blocks to create a formatted report of exception 'ex'."""
             end_time = datetime.datetime.now()
             training_time = _format_train_time(end_time, start_time)
             return [
@@ -138,6 +139,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             ]
 
         def _starting_message(func_name, host_name, notification, start_time):
+            """Uses Slack blocks to create an initial report of training."""
             return [
                 {"type": "section", "text": {"type": "mrkdwn", "text": notification}},
                 {"type": "divider"},
@@ -157,6 +159,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             ]
 
         def _successful_message(func_name, host_name, notification, start_time, value):
+            """Uses Slack blocks to report a successful training run with statistics."""
             end_time = datetime.datetime.now()
             training_time = _format_train_time(end_time, start_time)
             blocks = [
@@ -208,6 +211,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             return blocks
 
         def _format_train_time(end_time, start_time):
+            """Returns a time delta in format HH:MM:SS"""
             elapsed_time = end_time - start_time
             hours, remainder = divmod(elapsed_time.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
@@ -221,3 +225,4 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
         return wrapper_sender
 
     return decorator_sender
+
