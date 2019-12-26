@@ -62,7 +62,7 @@ Note that launching this will asks you for the sender's email password. It will 
 
 ### Slack
 
-Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [webhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your [user id](https://api.slack.com/methods/users.identity) (if you want to tag yourself or someone else).
+Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [webhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your username (if you want to tag yourself or someone else).
 
 #### Python
 
@@ -77,7 +77,7 @@ def train_your_nicest_model(your_nicest_parameters):
     return {'loss': 0.9} # Optional return value
 ```
 
-You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_id>, <grandma's_slack_id>]`.
+You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_username>, <grandma's_slack_username>]`.
 
 #### Command-line
 
