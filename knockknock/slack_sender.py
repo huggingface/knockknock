@@ -83,23 +83,49 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 value = func(*args, **kwargs)
 
                 if master_process:
+                    notification = "Your training is complete 🎉"
+                    if user_mentions:
+                        notification = _add_mentions(notification)
+
                     end_time = datetime.datetime.now()
                     elapsed_time = end_time - start_time
-                    contents = ["Your training is complete 🎉",
-                                'Machine name: %s' % host_name,
-                                'Main call: %s' % func_name,
-                                'Starting date: %s' % start_time.strftime(DATE_FORMAT),
+                    hours, remainder = divmod(elapsed_time.seconds, 3600)
+                    minutes, seconds = divmod(remainder, 60)
+                    training_time = "{:2d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+
+                    contents = [,
                                 'End date: %s' % end_time.strftime(DATE_FORMAT),
                                 'Training duration: %s' % str(elapsed_time)]
 
-                    try:
-                        str_value = str(value)
-                        contents.append('Main call returned value: %s'% str_value)
-                    except:
-                        contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
+                    dump['blocks'] = [{"type": "section",
+                                       "text": {"type": "mrkdwn", "text": notification}},
+                                      {"type": "divider"},
+                                      {
+                                          "type": "context",
+                                          "elements": [
+                                              {
+                                                  "type": "mrkdwn",
+                                                  "text":
+                                                      '*Machine name:* {}\n'
+                                                      '*Main call:* {}\n'
+                                                      '*Starting date:* {}\n'
+                                                      '*End date:* {}\n'
+                                                      '*Training Duration:* {}'.format(host_name, func_name,
+                                                                                     start_time.strftime(DATE_FORMAT), end_time.strftime(DATE_FORMAT), training_time)
+                                              },
+                                          ],
+                                      }]
 
-                    contents.append(' '.join(user_mentions))
-                    dump['text'] = '\n'.join(contents)
+                    if value is not None:
+                        try:
+                            str_value = str(value)
+                            dump["blocks"].append({"type": "section",
+                                                   "text": {"type": "mrkdwn",
+                                                            "text": 'Main call returned value: {}'.format(str_value)}})
+                        except Exception as e:
+                            dump["blocks"].append("Couldn't str the returned value due to the following error: \n`{}`".format(e))
+
+                    dump['text'] = notification
                     dump['icon_emoji'] = ':tada:'
                     requests.post(webhook_url, json.dumps(dump))
 
