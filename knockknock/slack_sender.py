@@ -93,10 +93,6 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                     minutes, seconds = divmod(remainder, 60)
                     training_time = "{:2d}:{:02d}:{:02d}".format(hours, minutes, seconds)
 
-                    contents = [,
-                                'End date: %s' % end_time.strftime(DATE_FORMAT),
-                                'Training duration: %s' % str(elapsed_time)]
-
                     dump['blocks'] = [{"type": "section",
                                        "text": {"type": "mrkdwn", "text": notification}},
                                       {"type": "divider"},
@@ -117,11 +113,12 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                                       }]
 
                     if value is not None:
+                        dump["blocks"].append({"type": "divider"})
                         try:
                             str_value = str(value)
                             dump["blocks"].append({"type": "section",
                                                    "text": {"type": "mrkdwn",
-                                                            "text": 'Main call returned value: {}'.format(str_value)}})
+                                                            "text": '*Main call returned value:* {}'.format(str_value)}})
                         except Exception as e:
                             dump["blocks"].append("Couldn't str the returned value due to the following error: \n`{}`".format(e))
 
