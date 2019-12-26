@@ -9,6 +9,7 @@ import requests
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+
 def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     """
     Slack sender wrapper: execute func, send a Slack notification with the end status
@@ -21,7 +22,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     `channel`: str
         The slack room to log.
     `user_mentions`: List[str] (default=[])
-        Optional users ids to notify.
+        Optional usernames to notify.
         Visit https://api.slack.com/methods/users.identity for more details.
     """
 
@@ -30,6 +31,10 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
         "channel": channel,
         "icon_emoji": ":clapper:",
     }
+
+    if user_mentions:
+        user_mentions = ["@{}".format(user) for user in user_mentions if not user.startswith("@")]
+
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
@@ -50,13 +55,28 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 master_process = True
 
             if master_process:
-                contents = ['Your training has started 🎬',
-                            'Machine name: %s' % host_name,
-                            'Main call: %s' % func_name,
-                            'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                contents.append(' '.join(user_mentions))
-                dump['text'] = '\n'.join(contents)
+                notification = "Your training has started! 🎬"
+                if user_mentions:
+                    notification = _add_mentions(notification)
+
+                dump['blocks'] =[{"type": "section",
+                                  "text": {"type": "mrkdwn", "text": notification}},
+                                 {"type": "divider"},
+                                 {
+                                     "type": "context",
+                                     "elements": [
+                                         {
+                                             "type": "mrkdwn",
+                                             "text":
+                                                 '*Machine name:* {}\n'
+                                                 '*Main call:* {}\n'
+                                                 '*Starting date:* {}\n'.format(host_name, func_name, start_time.strftime(DATE_FORMAT))
+                                         },
+                                     ],
+                                 }]
+                dump['text'] = notification
                 dump['icon_emoji'] = ':clapper:'
+
                 requests.post(webhook_url, json.dumps(dump))
 
             try:
@@ -103,6 +123,10 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 dump['icon_emoji'] = ':skull_and_crossbones:'
                 requests.post(webhook_url, json.dumps(dump))
                 raise ex
+
+        def _add_mentions(notification):
+            notification = " ".join(user_mentions) + " " + notification
+            return notification
 
         return wrapper_sender
 
