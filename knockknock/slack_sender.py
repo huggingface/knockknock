@@ -59,28 +59,9 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 if user_mentions:
                     notification = _add_mentions(notification)
 
-                dump["blocks"] = [
-                    {
-                        "type": "section",
-                        "text": {"type": "mrkdwn", "text": notification},
-                    },
-                    {"type": "divider"},
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Machine name:* {}\n"
-                                "*Main call:* {}\n"
-                                "*Starting date:* {}\n".format(
-                                    host_name,
-                                    func_name,
-                                    start_time.strftime(DATE_FORMAT),
-                                ),
-                            }
-                        ],
-                    },
-                ]
+                dump["blocks"] = _starting_message(
+                    func_name, host_name, notification, start_time
+                )
                 dump["text"] = notification
                 dump["icon_emoji"] = ":clapper:"
 
@@ -94,63 +75,9 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                     if user_mentions:
                         notification = _add_mentions(notification)
 
-                    end_time = datetime.datetime.now()
-                    elapsed_time = end_time - start_time
-                    hours, remainder = divmod(elapsed_time.seconds, 3600)
-                    minutes, seconds = divmod(remainder, 60)
-                    training_time = "{:2d}:{:02d}:{:02d}".format(
-                        hours, minutes, seconds
+                    dump["blocks"] = _successful_message(
+                        func_name, host_name, notification, start_time, value
                     )
-
-                    dump["blocks"] = [
-                        {
-                            "type": "section",
-                            "text": {"type": "mrkdwn", "text": notification},
-                        },
-                        {"type": "divider"},
-                        {
-                            "type": "context",
-                            "elements": [
-                                {
-                                    "type": "mrkdwn",
-                                    "text": "*Machine name:* {}\n"
-                                    "*Main call:* {}\n"
-                                    "*Starting date:* {}\n"
-                                    "*End date:* {}\n"
-                                    "*Training Duration:* {}".format(
-                                        host_name,
-                                        func_name,
-                                        start_time.strftime(DATE_FORMAT),
-                                        end_time.strftime(DATE_FORMAT),
-                                        training_time,
-                                    ),
-                                }
-                            ],
-                        },
-                    ]
-
-                    if value is not None:
-                        dump["blocks"].append({"type": "divider"})
-                        try:
-                            str_value = str(value)
-                            dump["blocks"].append(
-                                {
-                                    "type": "section",
-                                    "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Main call returned value:* {}".format(
-                                            str_value
-                                        ),
-                                    },
-                                }
-                            )
-                        except Exception as e:
-                            dump["blocks"].append(
-                                "Couldn't str the returned value due to the following error: \n`{}`".format(
-                                    e
-                                )
-                            )
-
                     dump["text"] = notification
                     dump["icon_emoji"] = ":tada:"
                     requests.post(webhook_url, json.dumps(dump))
@@ -158,61 +85,134 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 return value
 
             except Exception as ex:
-                end_time = datetime.datetime.now()
-                elapsed_time = end_time - start_time
-                hours, remainder = divmod(elapsed_time.seconds, 3600)
-                minutes, seconds = divmod(remainder, 60)
-                training_time = "{:2d}:{:02d}:{:02d}".format(hours, minutes, seconds)
-
                 notification = "Your training has crashed ☠️"
                 if user_mentions:
                     notification = _add_mentions(notification)
 
-                dump["blocks"] = [
-                    {
-                        "type": "section",
-                        "text": {"type": "mrkdwn", "text": notification},
-                    },
-                    {"type": "divider"},
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Machine name:* {}\n"
-                                "*Main call:* {}\n"
-                                "*Starting date:* {}\n"
-                                "*Crash date:* {}\n"
-                                "*Time elapsed before crash:* {}".format(
-                                    host_name,
-                                    func_name,
-                                    start_time.strftime(DATE_FORMAT),
-                                    end_time.strftime(DATE_FORMAT),
-                                    training_time,
-                                ),
-                            }
-                        ],
-                    },
-                    {"type": "divider"},
-                    {
-                        "type": "section",
-                        "text": {"type": "mrkdwn", "text": "*Error:* `{}`".format(ex)},
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "*Traceback:*\n```{}```".format(
-                                traceback.format_exc()
-                            ),
-                        },
-                    },
-                ]
+                dump["blocks"] = _error_message(
+                    ex, func_name, host_name, notification, start_time
+                )
 
                 dump["text"] = notification
                 dump["icon_emoji"] = ":skull_and_crossbones:"
                 requests.post(webhook_url, json.dumps(dump))
                 raise ex
+
+        def _error_message(ex, func_name, host_name, notification, start_time):
+            end_time = datetime.datetime.now()
+            training_time = _format_train_time(end_time, start_time)
+            return [
+                {"type": "section", "text": {"type": "mrkdwn", "text": notification}},
+                {"type": "divider"},
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Machine name:* {}\n"
+                            "*Main call:* {}\n"
+                            "*Starting date:* {}\n"
+                            "*Crash date:* {}\n"
+                            "*Time elapsed before crash:* {}".format(
+                                host_name,
+                                func_name,
+                                start_time.strftime(DATE_FORMAT),
+                                end_time.strftime(DATE_FORMAT),
+                                training_time,
+                            ),
+                        }
+                    ],
+                },
+                {"type": "divider"},
+                {
+                    "type": "section",
+                    "text": {"type": "mrkdwn", "text": "*Error:* `{}`".format(ex)},
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Traceback:*\n```{}```".format(traceback.format_exc()),
+                    },
+                },
+            ]
+
+        def _starting_message(func_name, host_name, notification, start_time):
+            return [
+                {"type": "section", "text": {"type": "mrkdwn", "text": notification}},
+                {"type": "divider"},
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Machine name:* {}\n"
+                            "*Main call:* {}\n"
+                            "*Starting date:* {}\n".format(
+                                host_name, func_name, start_time.strftime(DATE_FORMAT)
+                            ),
+                        }
+                    ],
+                },
+            ]
+
+        def _successful_message(func_name, host_name, notification, start_time, value):
+            end_time = datetime.datetime.now()
+            training_time = _format_train_time(end_time, start_time)
+            blocks = [
+                {"type": "section", "text": {"type": "mrkdwn", "text": notification}},
+                {"type": "divider"},
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Machine name:* {}\n"
+                            "*Main call:* {}\n"
+                            "*Starting date:* {}\n"
+                            "*End date:* {}\n"
+                            "*Training Duration:* {}".format(
+                                host_name,
+                                func_name,
+                                start_time.strftime(DATE_FORMAT),
+                                end_time.strftime(DATE_FORMAT),
+                                training_time,
+                            ),
+                        }
+                    ],
+                },
+            ]
+
+            if value is not None:
+                blocks.append({"type": "divider"})
+                try:
+                    str_value = str(value)
+                    dump["blocks"].append(
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": "*Main call returned value:* {}".format(
+                                    str_value
+                                ),
+                            },
+                        }
+                    )
+                except Exception as e:
+                    blocks.append(
+                        "Couldn't str the returned value due to the following error: \n`{}`".format(
+                            e
+                        )
+                    )
+
+            return blocks
+
+        def _format_train_time(end_time, start_time):
+            elapsed_time = end_time - start_time
+            hours, remainder = divmod(elapsed_time.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            training_time = "{:2d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+            return training_time
 
         def _add_mentions(notification):
             notification = " ".join(user_mentions) + " " + notification
