@@ -131,18 +131,52 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             except Exception as ex:
                 end_time = datetime.datetime.now()
                 elapsed_time = end_time - start_time
-                contents = ["Your training has crashed ☠️",
-                            'Machine name: %s' % host_name,
-                            'Main call: %s' % func_name,
-                            'Starting date: %s' % start_time.strftime(DATE_FORMAT),
-                            'Crash date: %s' % end_time.strftime(DATE_FORMAT),
-                            'Crashed training duration: %s\n\n' % str(elapsed_time),
-                            "Here's the error:",
-                            '%s\n\n' % ex,
-                            "Traceback:",
-                            '%s' % traceback.format_exc()]
-                contents.append(' '.join(user_mentions))
-                dump['text'] = '\n'.join(contents)
+                hours, remainder = divmod(elapsed_time.seconds, 3600)
+                minutes, seconds = divmod(remainder, 60)
+                training_time = "{:2d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+
+                notification = "Your training has crashed ☠️"
+                if user_mentions:
+                    notification = _add_mentions(notification)
+
+                dump['blocks'] = [{"type": "section",
+                                   "text": {"type": "mrkdwn", "text": notification}},
+                                  {"type": "divider"},
+                                  {
+                                      "type": "context",
+                                      "elements": [
+                                          {
+                                              "type": "mrkdwn",
+                                              "text":
+                                                  '*Machine name:* {}\n'
+                                                  '*Main call:* {}\n'
+                                                  '*Starting date:* {}\n'
+                                                  '*Crash date:* {}\n'
+                                                  '*Time elapsed before crash:* {}'.format(host_name, func_name,
+                                                                                   start_time.strftime(DATE_FORMAT),
+                                                                                   end_time.strftime(DATE_FORMAT),
+                                                                                   training_time)
+                                          },
+                                      ],
+                                  },            {"type": "divider"},
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Error:* `{}`".format(ex),
+                },
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Traceback:*\n```{}```".format(
+                        traceback.format_exc()
+                    ),
+                },
+            },]
+
+                dump['text'] = notification
                 dump['icon_emoji'] = ':skull_and_crossbones:'
                 requests.post(webhook_url, json.dumps(dump))
                 raise ex
