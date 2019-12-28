@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender
+from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
 
     ## Desktop
     desktop_parser = subparsers.add_parser(
-        name="desktop",description="Send a desktop notification before and after function " +
+        name="desktop", description="Send a desktop notification before and after function " +
         "execution, with start and end status (successfully or crashed).")
     desktop_parser.add_argument("--title", type=str, required=False,
         help="The title of the notification, default to knockknock")
@@ -95,6 +95,21 @@ def main():
         "--sender-number", type=str, required=True,
         help="The phone number of the sender (Twilio number).")
     sms_parser.set_defaults(sender_func=sms_sender)
+
+    ## Matrix
+    matrix_parser = subparsers.add_parser(
+        name="matrix", description="Send a Matrix message before and after " +
+        "function execution, with start and end status (sucessfully or crashed).")
+    matrix_parser.add_argument(
+        "--homeserver", type=str, required=True,
+        help="The homeserver address which was used to register the BOT.")
+    matrix_parser.add_argument(
+        "--token", type=str, required=True,
+        help="The access TOKEN of the user that will send the messages.")
+    matrix_parser.add_argument(
+        "--room", type=str, required=True,
+        help="The alias of the room to which messages will be send by the BOT.")
+    matrix_parser.set_defaults(sender_func=matrix_sender)
 
     args, remaining_args = parser.parse_known_args()
     args = vars(args)

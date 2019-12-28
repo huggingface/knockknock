@@ -22,6 +22,7 @@ setup(
     install_requires=[
         'yagmail>=0.11.214',
         'keyring',
+        'matrix_client',
         'python-telegram-bot',
         'requests',
         'twilio'

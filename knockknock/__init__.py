@@ -5,3 +5,4 @@ from knockknock.sms_sender import sms_sender
 from knockknock.telegram_sender import telegram_sender
 from knockknock.teams_sender import teams_sender
 from knockknock.desktop_sender import desktop_sender
+from knockknock.matrix_sender import matrix_sender
