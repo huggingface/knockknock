@@ -29,6 +29,7 @@ There are currently *seven* ways to setup notifications:
 | [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) |
 | [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
 | [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) |
+| [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
 
 ### Email
 
@@ -186,7 +187,7 @@ Thanks to [@watkinsm](https://github.com/watkinsm), you can also use Discord to 
 from knockknock import discord_sender
 
 webhook_url = "<webhook_url_to_your_discord_channel>"
-@discord_sender(webhook_url=webhook_url")
+@discord_sender(webhook_url=webhook_url)
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
@@ -222,6 +223,37 @@ def train_your_nicest_model(your_nicest_parameters):
 knockknock desktop \
     --title 'Knockknock Desktop Notifier' \
     sleep 2
+```
+
+### Matrix
+
+Thanks to @jcklie, you can send notifications via [Matrix](https://matrix.org/). The homeserver is the server on which 
+your user that will send messages is registered. You'll have to get the access token for a bot or your own user. The 
+easiest way to obtain it is to look into Riot looking in the riot settings, `Help & About` ,down the bottom is: 
+`Access Token:<click to reveal>`. You also need to specify a room alias to which messages are sent. To obtain the 
+alias in Riot, create a room you want to use, then open the room settings under `Room Addresses` and add an alias.
+
+#### Python
+
+```python
+from knockknock import matrix_sender
+
+webhook_url = "<webhook_url_to_your_slack_room>"
+@matrix_sender(homeserver="HOMESERVER", token="TOKEN", room="ROOM")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock matrix \
+    --homeserver <homeserver> \
+    --token <token> \
+    --room <room> \
+    sleep 10
 ```
 
 ## Note on distributed training
