@@ -18,7 +18,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *seven* ways to setup notifications:
+There are currently *eight* ways to setup notifications:
 
 | Platform | External Contributors |
 |:---:|:---:|
@@ -227,19 +227,23 @@ knockknock desktop \
 
 ### Matrix
 
-Thanks to @jcklie, you can send notifications via [Matrix](https://matrix.org/). The homeserver is the server on which 
-your user that will send messages is registered. You'll have to get the access token for a bot or your own user. The 
-easiest way to obtain it is to look into Riot looking in the riot settings, `Help & About` ,down the bottom is: 
-`Access Token:<click to reveal>`. You also need to specify a room alias to which messages are sent. To obtain the 
-alias in Riot, create a room you want to use, then open the room settings under `Room Addresses` and add an alias.
+Thanks to [@jcklie](https://github.com/jcklie), you can send notifications via [Matrix](https://matrix.org/). The homeserver is the 
+server on which your user that will send messages is registered. Do not forget the schema for the URL (`http` or `https`).
+You'll have to get the access token for a bot or your own user. The easiest way to obtain it is to look into Riot looking 
+in the riot settings, `Help & About`, down the bottom is: `Access Token:<click to reveal>`. You also need to specify a 
+room alias to which messages are sent. To obtain the alias in Riot, create a room you want to use, then open the room 
+settings under `Room Addresses` and add an alias.
 
 #### Python
 
 ```python
 from knockknock import matrix_sender
 
-webhook_url = "<webhook_url_to_your_slack_room>"
-@matrix_sender(homeserver="HOMESERVER", token="TOKEN", room="ROOM")
+HOMESERVER = "<url_to_your_home_server>" # e.g. https://matrix.org
+TOKEN = "<your_auth_token>"              # e.g. WiTyGizlr8ntvBXdFfZLctyY
+ROOM = "<room_alias"                     # e.g. #knockknock:matrix.org
+
+@matrix_sender(homeserver=HOMESERVER, token=TOKEN, room=ROOM)
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
