@@ -55,7 +55,7 @@ knockknock email \
     sleep 10
 ```
 
-If `sender_email` is not specified, then `recipient_email` will be also used for sending.
+If `sender_email` is not specified, then the first email in `recipient_emails` will be used as the sender's email.
 
 Note that launching this will asks you for the sender's email password. It will be safely stored in the system keyring service through the [`keyring` Python library](https://pypi.org/project/keyring/).
 
