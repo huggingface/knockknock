@@ -16,7 +16,8 @@ def matrix_sender(homeserver: str, token: str, room: str):
     `homeserver`: str
         The homeserver address which was used to register the BOT.
         It is e.g. 'https://matrix-client.matrix.org'. It can be also looked up
-        in Riot by looking in the riot settings, "Help & About" at the bottom
+        in Riot by looking in the riot settings, "Help & About" at the bottom.
+        Specifying the schema (`http` or `https`) is required.
     `token`: str
         The access TOKEN of the user that will send the messages.
         It can be obtained in Riot by looking in the riot settings, "Help & About" ,
