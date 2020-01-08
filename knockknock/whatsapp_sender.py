@@ -35,7 +35,8 @@ def whatsapp_sender(account_sid: str, auth_token: str, recipient_number: str, se
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
                 text = '\n'.join(contents)
-                client.messages.create(body=text, from_=sender_number, to=recipient_number)
+                y = 'whatsapp:'
+                client.messages.create(body=text, from_=y+sender_number, to=y+recipient_number)
 
             try:
                 value = func(*args, **kwargs)
