@@ -1,8 +1,10 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender
-
+from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, \
+                       sms_sender, discord_sender, desktop_sender, matrix_sender
+                    #    dingtalk_sender
+from dingtalk_sender import dingtalk_sender
 
 def main():
     parser = argparse.ArgumentParser(
@@ -54,6 +56,24 @@ def main():
         "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user ids to notify, as comma seperated list.")
     slack_parser.set_defaults(sender_func=slack_sender)
+
+    ## DingTalk
+    dingtalk_parser = subparsers.add_parser(
+        name="dingtalk", description="Send a dingtalk message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    dingtalk_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your dingtalk chatroom")
+    dingtalk_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user's phone number to notify, as comma seperated list.")
+    dingtalk_parser.add_argument(
+        "--secret", type=str, required=False, default='',
+        help="Optional the dingtalk chatroom robot's secret")
+    dingtalk_parser.add_argument(
+        "--keywords", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional accepted keywords set in dingtalk chatroom robot")
+    dingtalk_parser.set_defaults(sender_func=dingtalk_sender)
 
     ## Telegram
     telegram_parser = subparsers.add_parser(
