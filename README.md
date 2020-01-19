@@ -30,6 +30,7 @@ There are currently *eight* ways to setup notifications:
 | [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
 | [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) |
 | [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
+| [DingTalk](#dingtalk) | [@wuutiing](https://github.com/wuutiing) |
 
 ### Email
 
@@ -259,6 +260,36 @@ knockknock matrix \
     --room <room> \
     sleep 10
 ```
+
+### DingTalk
+DingTalk is now supported thanks to [@wuutiing](https://github.com/wuutiing). Given DingTalk chatroom robot's webhook url and secret/keywords(at least one of them are set when creating a chatroom robot), your notifications will be sent to reach any one in that chatroom.
+
+#### Python
+
+```python
+from knockknock import dingtalk_sender
+
+webhook_url = "<webhook_url_to_your_dingtalk_chatroom_robot>"
+@slack_sender(webhook_url=webhook_url, secret="<your_robot_secret_if_set>", keywords=["<list_of_keywords_if_set>"])
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_at>"]`.
+
+#### Command-line
+
+```bash
+knockknock dingtalk \
+    --webhook-url <webhook_url_to_your_dingtalk_chatroom_robot> \
+    --secret <your_robot_secret_if_set> \
+    sleep 10
+```
+
+You can also specify an optional argument to at specific people: `--user-mentions gamma_seperated_phonenumbers`.
+
 
 ## Note on distributed training
 
