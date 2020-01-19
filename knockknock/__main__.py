@@ -2,9 +2,8 @@ import argparse
 import subprocess
 
 from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, \
-                       sms_sender, discord_sender, desktop_sender, matrix_sender
-                    #    dingtalk_sender
-from dingtalk_sender import dingtalk_sender
+                       sms_sender, discord_sender, desktop_sender, matrix_sender, \
+                       dingtalk_sender
 
 def main():
     parser = argparse.ArgumentParser(
