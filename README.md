@@ -205,6 +205,7 @@ knockknock discord \
 ### Desktop Notification
 
 You can also get notified from a desktop notification. It is currently only available for MacOS and Linux.
+For Linux it uses the nofity-send command which uses libnotify, In order to use libnotify, you have to install a notification server. Cinnamon, Deepin, Enlightenment, GNOME, GNOME Flashback and KDE Plasma use their own implementations to display notifications. In other desktop environments, the notification server needs to be launched using your WM's/DE's "autostart" option. 
 
 #### Python
 
