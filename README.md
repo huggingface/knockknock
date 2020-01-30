@@ -204,7 +204,7 @@ knockknock discord \
 
 ### Desktop Notification
 
-You can also get notified from a desktop notification. It is currently only available for MacOS.
+You can also get notified from a desktop notification. It is currently only available for MacOS and Linux.
 
 #### Python
 
