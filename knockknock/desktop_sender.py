@@ -4,12 +4,17 @@ import traceback
 import functools
 import socket
 import subprocess
+import platform
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def desktop_sender(title:str="knockknock"):
     
     def show_notification(text:str,title:str):
-        subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
+        if platform.system() == "Darwin":     
+            subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
+        
+        elif platform.system() == "Linux":
+            subprocess.run(["notify-send", title, text])        
 
     def decorator_sender(func):
         @functools.wraps(func)
