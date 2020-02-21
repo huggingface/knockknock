@@ -10,6 +10,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 def desktop_sender(title:str="knockknock"):
     
     def show_notification(text:str,title:str):
+        # Check the OS
         if platform.system() == "Darwin":     
             subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
         
