@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='knockknock',
-    version='0.1.8',
+    version='0.1.9',
     description='Be notified when your training is complete with only two additional lines of code',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
@@ -25,7 +25,8 @@ setup(
         'matrix_client',
         'python-telegram-bot',
         'requests',
-        'twilio'
+        'twilio',
+        'win10toast==0.9'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',
