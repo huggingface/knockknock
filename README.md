@@ -18,7 +18,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *eight* ways to setup notifications:
+There are currently *nine* ways to setup notifications:
 
 | Platform | External Contributors |
 |:---:|:---:|
@@ -30,6 +30,8 @@ There are currently *eight* ways to setup notifications:
 | [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
 | [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz)|
 | [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
+| [Amazon Chime](#amazon-chime) | [@prabhakar267](https://github.com/prabhakar267) |
+
 
 ### Email
 
@@ -260,6 +262,32 @@ knockknock matrix \
     --room <room> \
     sleep 10
 ```
+
+### Amazon Chime
+
+Thanks to [@prabhakar267](https://github.com/prabhakar267), you can also use Amazon Chime to get notifications. You'll have to get your Chime room [webhook URL](https://docs.aws.amazon.com/chime/latest/dg/webhooks.html).
+
+#### Python
+
+```python
+from knockknock import chime_sender
+
+@chime_sender(webhook_url="<webhook_url_to_your_chime_room>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock chime \
+    --webhook-url <webhook_url_to_your_chime_room> \
+    sleep 10
+```
+
+You can also specify an optional argument to tag specific people: `user_mentions=[<your_alias>, <grandma's_alias>]`.
 
 ## Note on distributed training
 
