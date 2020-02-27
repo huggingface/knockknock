@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender
+from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender, chime_sender
 
 
 def main():
@@ -11,6 +11,18 @@ def main():
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
 
+    ## Chime
+    chime_parser = subparsers.add_parser(
+        name="chime", description="Send a Chime message before and after function " +
+        "execution, with start and end status (successfully or crashed).")
+    chime_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your chime room.")
+    chime_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user alias or full email address to notify, as comma separated list.")
+    chime_parser.set_defaults(sender_func=chime_sender)
+
     ## Desktop
     desktop_parser = subparsers.add_parser(
         name="desktop", description="Send a desktop notification before and after function " +
@@ -18,7 +30,7 @@ def main():
     desktop_parser.add_argument("--title", type=str, required=False,
         help="The title of the notification, default to knockknock")
     desktop_parser.set_defaults(sender_func=desktop_sender)
-    
+
     ## Discord
     discord_parser = subparsers.add_parser(
         name="discord", description="Send a Discord message before and after function " +
