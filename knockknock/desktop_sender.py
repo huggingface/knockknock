@@ -9,9 +9,9 @@ from win10toast import ToastNotifier
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-def desktop_sender(title:str="knockknock"):
+def desktop_sender(title: str = "knockknock"):
     
-    def show_notification(text:str,title:str):
+    def show_notification(text: str, title: str):
         # Check the OS
         if platform.system() == "Darwin":     
             subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
@@ -22,9 +22,9 @@ def desktop_sender(title:str="knockknock"):
         elif platform.system() == "Windows":
             toaster = ToastNotifier()
             toaster.show_toast(title,
-                   text,
-                   icon_path=None,
-                   duration=5)
+                               text,
+                               icon_path=None,
+                               duration=5)
 
     def decorator_sender(func):
         @functools.wraps(func)
