@@ -28,7 +28,7 @@ def dingtalk_sender(webhook_url: str,
         Visit https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq for more details.
     `user_mentions`: List[str] (default=[])
         Optional users phone number to notify.
-        Visit https://api.slack.com/methods/users.identity for more details.
+        Visit https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq for more details.
     `secret`: str (default='')
         DingTalk chatroom robot are set with at least one of those three security methods
         (ip / keyword / secret), the chatroom will only accect messages that:
