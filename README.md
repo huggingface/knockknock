@@ -270,7 +270,7 @@ DingTalk is now supported thanks to [@wuutiing](https://github.com/wuutiing). Gi
 from knockknock import dingtalk_sender
 
 webhook_url = "<webhook_url_to_your_dingtalk_chatroom_robot>"
-@slack_sender(webhook_url=webhook_url, secret="<your_robot_secret_if_set>", keywords=["<list_of_keywords_if_set>"])
+@dingtalk_sender(webhook_url=webhook_url, secret="<your_robot_secret_if_set>", keywords=["<list_of_keywords_if_set>"])
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
