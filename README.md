@@ -18,7 +18,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *nine* ways to setup notifications:
+There are currently *ten* ways to setup notifications:
 
 | Platform | External Contributors |
 |:---:|:---:|
@@ -31,6 +31,7 @@ There are currently *nine* ways to setup notifications:
 | [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz)|
 | [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
 | [Amazon Chime](#amazon-chime) | [@prabhakar267](https://github.com/prabhakar267) |
+| [DingTalk](#dingtalk) | [@wuutiing](https://github.com/wuutiing) |
 
 
 ### Email
@@ -179,6 +180,7 @@ knockknock sms \
     sleep 10
 ```
 
+
 ### Discord
 
 Thanks to [@watkinsm](https://github.com/watkinsm), you can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
@@ -203,6 +205,7 @@ knockknock discord \
     --webhook-url <webhook_url_to_your_discord_channel> \
     sleep 10
 ```
+
 
 ### Desktop Notification
 
@@ -263,6 +266,7 @@ knockknock matrix \
     sleep 10
 ```
 
+
 ### Amazon Chime
 
 Thanks to [@prabhakar267](https://github.com/prabhakar267), you can also use Amazon Chime to get notifications. You'll have to get your Chime room [webhook URL](https://docs.aws.amazon.com/chime/latest/dg/webhooks.html).
@@ -288,6 +292,36 @@ knockknock chime \
 ```
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_alias>, <grandma's_alias>]`.
+
+
+### DingTalk
+
+DingTalk is now supported thanks to [@wuutiing](https://github.com/wuutiing). Given DingTalk chatroom robot's webhook url and secret/keywords(at least one of them are set when creating a chatroom robot), your notifications will be sent to reach any one in that chatroom.
+
+#### Python
+
+```python
+from knockknock import dingtalk_sender
+
+webhook_url = "<webhook_url_to_your_dingtalk_chatroom_robot>"
+@dingtalk_sender(webhook_url=webhook_url, secret="<your_robot_secret_if_set>", keywords=["<list_of_keywords_if_set>"])
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock dingtalk \
+    --webhook-url <webhook_url_to_your_dingtalk_chatroom_robot> \
+    --secret <your_robot_secret_if_set> \
+    sleep 10
+```
+
+You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_at>"]`.
+
 
 ## Note on distributed training
 
