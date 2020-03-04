@@ -18,7 +18,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *eight* ways to setup notifications:
+There are currently *ten* ways to setup notifications:
 
 | Platform | External Contributors |
 |:---:|:---:|
@@ -28,9 +28,11 @@ There are currently *eight* ways to setup notifications:
 | [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) |
 | [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) |
 | [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
-| [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) |
+| [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz)|
 | [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
+| [Amazon Chime](#amazon-chime) | [@prabhakar267](https://github.com/prabhakar267) |
 | [DingTalk](#dingtalk) | [@wuutiing](https://github.com/wuutiing) |
+
 
 ### Email
 
@@ -178,6 +180,7 @@ knockknock sms \
     sleep 10
 ```
 
+
 ### Discord
 
 Thanks to [@watkinsm](https://github.com/watkinsm), you can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
@@ -203,9 +206,11 @@ knockknock discord \
     sleep 10
 ```
 
+
 ### Desktop Notification
 
-You can also get notified from a desktop notification. It is currently only available for MacOS.
+You can also get notified from a desktop notification. It is currently only available for MacOS and Linux and Windows 10.
+For Linux it uses the nofity-send command which uses libnotify, In order to use libnotify, you have to install a notification server. Cinnamon, Deepin, Enlightenment, GNOME, GNOME Flashback and KDE Plasma use their own implementations to display notifications. In other desktop environments, the notification server needs to be launched using your WM's/DE's "autostart" option. 
 
 #### Python
 
@@ -261,7 +266,36 @@ knockknock matrix \
     sleep 10
 ```
 
+
+### Amazon Chime
+
+Thanks to [@prabhakar267](https://github.com/prabhakar267), you can also use Amazon Chime to get notifications. You'll have to get your Chime room [webhook URL](https://docs.aws.amazon.com/chime/latest/dg/webhooks.html).
+
+#### Python
+
+```python
+from knockknock import chime_sender
+
+@chime_sender(webhook_url="<webhook_url_to_your_chime_room>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock chime \
+    --webhook-url <webhook_url_to_your_chime_room> \
+    sleep 10
+```
+
+You can also specify an optional argument to tag specific people: `user_mentions=[<your_alias>, <grandma's_alias>]`.
+
+
 ### DingTalk
+
 DingTalk is now supported thanks to [@wuutiing](https://github.com/wuutiing). Given DingTalk chatroom robot's webhook url and secret/keywords(at least one of them are set when creating a chatroom robot), your notifications will be sent to reach any one in that chatroom.
 
 #### Python
@@ -277,8 +311,6 @@ def train_your_nicest_model(your_nicest_parameters):
     return {'loss': 0.9} # Optional return value
 ```
 
-You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_at>"]`.
-
 #### Command-line
 
 ```bash
@@ -288,7 +320,7 @@ knockknock dingtalk \
     sleep 10
 ```
 
-You can also specify an optional argument to at specific people: `--user-mentions gamma_seperated_phonenumbers`.
+You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_at>"]`.
 
 
 ## Note on distributed training

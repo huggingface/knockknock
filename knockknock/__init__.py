@@ -1,3 +1,4 @@
+from knockknock.chime_sender import chime_sender
 from knockknock.discord_sender import discord_sender
 from knockknock.email_sender import email_sender
 from knockknock.slack_sender import slack_sender
