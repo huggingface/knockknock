@@ -5,7 +5,6 @@ import functools
 import socket
 import subprocess
 import platform
-from win10toast import ToastNotifier
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -20,6 +19,11 @@ def desktop_sender(title: str = "knockknock"):
             subprocess.run(["notify-send", title, text])
         
         elif platform.system() == "Windows":
+            try:
+                from win10toast import ToastNotifier
+            except ImportError as err:
+                print('Error: to use Windows Desktop Notifications, you need to install `win10toast` first. Please run `pip install win10toast==0.9`.')
+
             toaster = ToastNotifier()
             toaster.show_toast(title,
                                text,
