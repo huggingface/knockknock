@@ -10,7 +10,7 @@ import requests
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
+def slack_sender(webhook_url: str, user_mentions: List[str] = []):
     """
     Slack sender wrapper: execute func, send a Slack notification with the end status
     (sucessfully finished or crashed) at the end. Also send a Slack notification before
@@ -19,18 +19,10 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     `webhook_url`: str
         The webhook URL to access your slack room.
         Visit https://api.slack.com/incoming-webhooks#create_a_webhook for more details.
-    `channel`: str
-        The slack room to log.
     `user_mentions`: List[str] (default=[])
         Optional user ids to notify.
         Visit https://api.slack.com/methods/users.identity for more details.
     """
-
-    dump = {
-        "username": "Knock Knock",
-        "channel": channel,
-        "icon_emoji": ":clapper:",
-    }
 
     if user_mentions:
         user_mentions = ["<@{}>".format(user) for user in user_mentions]
@@ -59,13 +51,14 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 if user_mentions:
                     notification = _add_mentions(notification)
 
-                dump["blocks"] = _starting_message(
-                    func_name, host_name, notification, start_time
-                )
-                dump["text"] = notification
-                dump["icon_emoji"] = ":clapper:"
+                payload = {
+                    "blocks": _starting_message(
+                        func_name, host_name, notification, start_time
+                    ),
+                    "text": notification,
+                }
 
-                requests.post(webhook_url, json.dumps(dump))
+                requests.post(webhook_url, json.dumps(payload))
 
             try:
                 value = func(*args, **kwargs)
@@ -75,12 +68,13 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                     if user_mentions:
                         notification = _add_mentions(notification)
 
-                    dump["blocks"] = _successful_message(
-                        func_name, host_name, notification, start_time, value
-                    )
-                    dump["text"] = notification
-                    dump["icon_emoji"] = ":tada:"
-                    requests.post(webhook_url, json.dumps(dump))
+                    payload = {
+                        "blocks": _successful_message(
+                            func_name, host_name, notification, start_time, value
+                        ),
+                        "text": notification,
+                    }
+                    requests.post(webhook_url, json.dumps(payload))
 
                 return value
 
@@ -89,13 +83,13 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 if user_mentions:
                     notification = _add_mentions(notification)
 
-                dump["blocks"] = _error_message(
-                    ex, func_name, host_name, notification, start_time
-                )
-
-                dump["text"] = notification
-                dump["icon_emoji"] = ":skull_and_crossbones:"
-                requests.post(webhook_url, json.dumps(dump))
+                payload = {
+                    "blocks": _error_message(
+                        ex, func_name, host_name, notification, start_time
+                    ),
+                    "text": notification,
+                }
+                requests.post(webhook_url, json.dumps(payload))
                 raise ex
 
         def _error_message(ex, func_name, host_name, notification, start_time):
@@ -229,4 +223,3 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
         return wrapper_sender
 
     return decorator_sender
-
