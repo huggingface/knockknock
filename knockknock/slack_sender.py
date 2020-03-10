@@ -111,7 +111,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                         {
                             "type": "mrkdwn",
                             "text": "*Machine name:* {}\n"
-                            "*Main call:* {}\n"
+                            "*Main call:* `{}`\n"
                             "*Starting date:* {}\n"
                             "*Crash date:* {}\n"
                             "*Time elapsed before crash:* {}".format(
@@ -171,7 +171,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                         {
                             "type": "mrkdwn",
                             "text": "*Machine name:* {}\n"
-                            "*Main call:* {}\n"
+                            "*Main call:* `{}`\n"
                             "*Starting date:* {}\n"
                             "*End date:* {}\n"
                             "*Training Duration:* {}".format(
@@ -195,7 +195,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                             "type": "section",
                             "text": {
                                 "type": "mrkdwn",
-                                "text": "*Main call returned value:* {}".format(
+                                "text": "*Main call returned value:* `{}`".format(
                                     str_value
                                 ),
                             },
@@ -211,15 +211,19 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
             return blocks
 
         def _format_train_time(end_time, start_time):
-            """Returns a time delta in format HH:MM:SS"""
+            """Returns a time delta as a string in the format '%d %H:%M:%S'"""
             elapsed_time = end_time - start_time
-            hours, remainder = divmod(elapsed_time.seconds, 3600)
+            days, remainder = divmod(elapsed_time.seconds, 86400)
+            hours, remainder = divmod(remainder, 24)
             minutes, seconds = divmod(remainder, 60)
             training_time = "{:2d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+
+            if days:
+                training_time = "{}d ".format(days) + training_time
             return training_time
 
         def _add_mentions(notification):
-            notification = " ".join(user_mentions) + " " + notification
+            notification = notification + " " + " ".join(user_mentions)
             return notification
 
         return wrapper_sender
