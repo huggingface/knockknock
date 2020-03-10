@@ -22,7 +22,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     `channel`: str
         The slack room to log.
     `user_mentions`: List[str] (default=[])
-        Optional usernames to notify.
+        Optional user ids to notify.
         Visit https://api.slack.com/methods/users.identity for more details.
     """
 
@@ -33,7 +33,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     }
 
     if user_mentions:
-        user_mentions = ["@{}".format(user) for user in user_mentions if not user.startswith("@")]
+        user_mentions = ["<@{}>".format(user) for user in user_mentions]
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -149,7 +149,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                         {
                             "type": "mrkdwn",
                             "text": "*Machine name:* {}\n"
-                            "*Main call:* {}\n"
+                            "*Main call:* `{}`\n"
                             "*Starting date:* {}\n".format(
                                 host_name, func_name, start_time.strftime(DATE_FORMAT)
                             ),
@@ -190,7 +190,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                 blocks.append({"type": "divider"})
                 try:
                     str_value = str(value)
-                    dump["blocks"].append(
+                    blocks.append(
                         {
                             "type": "section",
                             "text": {
