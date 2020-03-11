@@ -10,7 +10,8 @@ from knockknock import (chime_sender,
                         slack_sender,
                         sms_sender,
                         teams_sender,
-                        telegram_sender,)
+                        telegram_sender,
+                        wechat_work_sender,)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -92,6 +93,22 @@ def main():
         "--keywords", type=lambda s: s.split(","), required=False, default=[],
         help="Optional accepted keywords set in dingtalk chatroom robot")
     dingtalk_parser.set_defaults(sender_func=dingtalk_sender)
+
+    ## WeChat Work
+    wechat_work_parser = subparsers.add_parser(
+        name="wechat-work", description="Send a wechat_work message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    wechat_work_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your wechat_work chatroom")
+    wechat_work_parser.add_argument(
+        "--mentioned-list", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional userids to notify (use '@all' for all group members), as comma seperated list.")
+    wechat_work_parser.add_argument(
+        "--mentioned-mobile-list", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user's phone numbers to notify (use '@all' for all group members), as comma seperated list.")
+    wechat_work_parser.set_defaults(sender_func=wechat_work_sender)
+
 
     ## Telegram
     telegram_parser = subparsers.add_parser(

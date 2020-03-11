@@ -18,7 +18,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *ten* ways to setup notifications:
+There are currently *eleven* ways to setup notifications:
 
 | Platform | External Contributors |
 |:---:|:---:|
@@ -32,6 +32,7 @@ There are currently *ten* ways to setup notifications:
 | [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
 | [Amazon Chime](#amazon-chime) | [@prabhakar267](https://github.com/prabhakar267) |
 | [DingTalk](#dingtalk) | [@wuutiing](https://github.com/wuutiing) |
+| [WeChat Work](#wechat-work) | [@jcyk](https://github.com/jcyk) |
 
 
 ### Email
@@ -321,6 +322,33 @@ knockknock dingtalk \
 ```
 
 You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_at>"]`.
+
+### WeChat Work
+
+WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given WeChat Work chatroom robot's webhook url, your notifications will be sent to reach any one in that chatroom.
+
+#### Python
+
+```python
+from knockknock import wechat_work_sender
+
+webhook_url = "<webhook_url_to_your_wechat_work_chatroom_robot>"
+@wechat_work_sender(webhook_url=webhook_url)
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock wechat_work \
+    --webhook-url <webhook_url_to_your_wechat_work_chatroom_robot> \
+    sleep 10
+```
+
+You can also specify an optional argument to at specific people: `mentioned_list=["<list_of_userids_who_you_want_to_at>"]` and/or `mentioned_mobile_list=["<list_of_phonenumbers_who_you_want_to_at>"]`.
 
 
 ## Note on distributed training
