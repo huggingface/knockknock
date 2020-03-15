@@ -330,10 +330,10 @@ WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given W
 #### Python
 
 ```python
-from knockknock import wechat_work_sender
+from knockknock import wechat_sender
 
 webhook_url = "<webhook_url_to_your_wechat_work_chatroom_robot>"
-@wechat_work_sender(webhook_url=webhook_url)
+@wechat_sender(webhook_url=webhook_url)
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
@@ -343,12 +343,12 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock wechat_work \
+knockknock wechat \
     --webhook-url <webhook_url_to_your_wechat_work_chatroom_robot> \
     sleep 10
 ```
 
-You can also specify an optional argument to tag specific people: `mentioned_list=["<list_of_userids_you_want_to_tag>"]` and/or `mentioned_mobile_list=["<list_of_phonenumbers_you_want_to_tag>"]`.
+You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
 
 
 ## Note on distributed training
