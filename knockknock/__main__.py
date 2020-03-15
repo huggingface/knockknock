@@ -7,6 +7,7 @@ from knockknock import (chime_sender,
                         discord_sender,
                         email_sender,
                         matrix_sender,
+                        rocketchat_sender,
                         slack_sender,
                         sms_sender,
                         teams_sender,
@@ -19,7 +20,7 @@ def main():
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
 
-    ## Chime
+    # Chime
     chime_parser = subparsers.add_parser(
         name="chime", description="Send a Chime message before and after function " +
         "execution, with start and end status (successfully or crashed).")
@@ -31,15 +32,15 @@ def main():
         help="Optional user alias or full email address to notify, as comma separated list.")
     chime_parser.set_defaults(sender_func=chime_sender)
 
-    ## Desktop
+    # Desktop
     desktop_parser = subparsers.add_parser(
         name="desktop", description="Send a desktop notification before and after function " +
         "execution, with start and end status (successfully or crashed).")
     desktop_parser.add_argument("--title", type=str, required=False,
-        help="The title of the notification, default to knockknock")
+                                help="The title of the notification, default to knockknock")
     desktop_parser.set_defaults(sender_func=desktop_sender)
 
-    ## Discord
+    # Discord
     discord_parser = subparsers.add_parser(
         name="discord", description="Send a Discord message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -48,7 +49,7 @@ def main():
         help="The webhook URL to access your Discord server/channel.")
     discord_parser.set_defaults(sender_func=discord_sender)
 
-    ## Email
+    # Email
     email_parser = subparsers.add_parser(
         name="email", description="Send an email before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -61,7 +62,7 @@ def main():
         "(default: use the same address as the first email in `recipient-emails`)")
     email_parser.set_defaults(sender_func=email_sender)
 
-    ## Slack
+    # Slack
     slack_parser = subparsers.add_parser(
         name="slack", description="Send a Slack message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -75,7 +76,7 @@ def main():
         help="Optional user ids to notify, as comma seperated list.")
     slack_parser.set_defaults(sender_func=slack_sender)
 
-    ## DingTalk
+    # DingTalk
     dingtalk_parser = subparsers.add_parser(
         name="dingtalk", description="Send a dingtalk message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -93,7 +94,7 @@ def main():
         help="Optional accepted keywords set in dingtalk chatroom robot")
     dingtalk_parser.set_defaults(sender_func=dingtalk_sender)
 
-    ## Telegram
+    # Telegram
     telegram_parser = subparsers.add_parser(
         name="telegram", description="Send a Telegram message before and after " +
         "function execution, with start and end status (sucessfully or crashed).")
@@ -105,7 +106,7 @@ def main():
         help="Your chat room id with your notification BOT.")
     telegram_parser.set_defaults(sender_func=telegram_sender)
 
-    ## Teams
+    # Teams
     teams_parser = subparsers.add_parser(
         name="teams", description="Send a teams message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -117,7 +118,7 @@ def main():
         help="Optional user ids to notify, as comma seperated list.")
     teams_parser.set_defaults(sender_func=teams_sender)
 
-    ## SMS
+    # SMS
     sms_parser = subparsers.add_parser(
         name="sms", description="Send an SMS using the Twilio API")
     sms_parser.add_argument(
@@ -134,7 +135,7 @@ def main():
         help="The phone number of the sender (Twilio number).")
     sms_parser.set_defaults(sender_func=sms_sender)
 
-    ## Matrix
+    # Matrix
     matrix_parser = subparsers.add_parser(
         name="matrix", description="Send a Matrix message before and after " +
         "function execution, with start and end status (sucessfully or crashed).")
@@ -148,6 +149,29 @@ def main():
         "--room", type=str, required=True,
         help="The alias of the room to which messages will be send by the BOT.")
     matrix_parser.set_defaults(sender_func=matrix_sender)
+
+    # RocketChat
+    rocketchat_parser = subparsers.add_parser(
+        name="rocketchat", description="Send a RocketChat message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    rocketchat_parser.add_argument(
+        "--rocketchat-server-url", type=str, required=True,
+        help="The RocketChat server URL.")
+    rocketchat_parser.add_argument(
+        "--rocketchat-user-id", type=str, required=True,
+        help="The RocketChat user id to post messages with (you'll be able to view your user id when you create a personal access token).")
+    rocketchat_parser.add_argument(
+        "--rocketchat-auth-token", type=str, required=True,
+        help="The RocketChat personal access token." +
+        "Visit https://rocket.chat/docs/developer-guides/rest-api/personal-access-tokens/ for more details.")
+    rocketchat_parser.add_argument(
+        "--channel", type=str, required=True, help="The RocketChat channel to log.")
+    rocketchat_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user names to notify, as comma seperated list.")
+    rocketchat_parser.add_argument(
+        "--alias", type=str, required=False, default="", help="Optional alias to use for the notification.")
+    rocketchat_parser.set_defaults(sender_func=rocketchat_sender)
 
     args, remaining_args = parser.parse_known_args()
     args = vars(args)
