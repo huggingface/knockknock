@@ -11,13 +11,12 @@ import requests
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-def rocketchat_sender(
-        rocketchat_server_url: str,
-        rocketchat_user_id: str,
-        rocketchat_auth_token: str,
-        channel: str,
-        user_mentions: List[str] = [],
-        alias: str = ""):
+def rocketchat_sender(rocketchat_server_url: str,
+                      rocketchat_user_id: str,
+                      rocketchat_auth_token: str,
+                      channel: str,
+                      user_mentions: List[str] = [],
+                      alias: str = ""):
     """
     RocketChat sender wrapper: execute func, post a RocketChat message with the end status
     (sucessfully finished or crashed) at the end. Also send a RocketChat message before
