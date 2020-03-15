@@ -20,7 +20,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently _ten_ ways to setup notifications:
+There are currently *ten* ways to setup notifications:
 
 |               Platform                |                                   External Contributors                                   |
 | :-----------------------------------: | :---------------------------------------------------------------------------------------: |
