@@ -10,9 +10,9 @@ import time
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-def wechat_work_sender(webhook_url: str,
-                 mentioned_list: List[str] = [],
-                 mentioned_mobile_list: List[str] = []):
+def wechat_sender(webhook_url: str,
+                  user_mentions: List[str] = [],
+                  user_mentions_mobile: List[str] = []):
     """
     WeChat Work sender wrapper: execute func, send a WeChat Work notification with the end status
     (sucessfully finished or crashed) at the end. Also send a WeChat Work notification before
@@ -22,10 +22,10 @@ def wechat_work_sender(webhook_url: str,
     `webhook_url`: str
         The webhook URL to access your WeChat Work chatroom.
         Visit https://work.weixin.qq.com/api/doc/90000/90136/91770 for more details.
-    `mentioned_list`: List[str] (default=[])
+    `user_mentions`: List[str] (default=[])
         Optional userids to notify (use '@all' for all group members).
         Visit https://work.weixin.qq.com/api/doc/90000/90136/91770 for more details.
-    `mentioned_mobile_list`: List[str] (default=[])
+    `user_mentions_mobile`: List[str] (default=[])
         Optional user's phone numbers to notify (use '@all' for all group members).
         Visit https://work.weixin.qq.com/api/doc/90000/90136/91770 for more details.
     """
@@ -34,8 +34,8 @@ def wechat_work_sender(webhook_url: str,
         "msgtype": "text", 
         "text": {
             "content": "",
-            "mentioned_list":mentioned_list,
-            "mentioned_mobile_list":mentioned_mobile_list
+            "mentioned_list":user_mentions,
+            "mentioned_mobile_list":user_mentions_mobile
         }
     }
 
