@@ -321,11 +321,11 @@ knockknock dingtalk \
     sleep 10
 ```
 
-You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_at>"]`.
+You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_tag>"]`.
 
 ### WeChat Work
 
-WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given WeChat Work chatroom robot's webhook url, your notifications will be sent to reach any one in that chatroom.
+WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given WeChat Work chatroom robot's webhook url, your notifications will be sent to reach anyone in that chatroom.
 
 #### Python
 
@@ -348,7 +348,7 @@ knockknock wechat_work \
     sleep 10
 ```
 
-You can also specify an optional argument to at specific people: `mentioned_list=["<list_of_userids_who_you_want_to_at>"]` and/or `mentioned_mobile_list=["<list_of_phonenumbers_who_you_want_to_at>"]`.
+You can also specify an optional argument to tag specific people: `mentioned_list=["<list_of_userids_you_want_to_tag>"]` and/or `mentioned_mobile_list=["<list_of_phonenumbers_you_want_to_tag>"]`.
 
 
 ## Note on distributed training
