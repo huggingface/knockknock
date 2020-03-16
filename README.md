@@ -78,7 +78,7 @@ Similarly, you can also use Slack to get notifications. You'll have to get your 
 from knockknock import slack_sender
 
 webhook_url = "<webhook_url_to_your_slack_room>"
-@slack_sender(webhook_url=webhook_url, channel="<your_favorite_slack_channel>")
+@slack_sender(webhook_url=webhook_url)
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
