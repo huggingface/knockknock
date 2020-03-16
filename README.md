@@ -1,4 +1,5 @@
 # Knock Knock
+
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/knockknock)](https://pepy.tech/project/knockknock) [![Downloads](https://pepy.tech/badge/knockknock/month)](https://pepy.tech/project/knockknock/month) [![GitHub stars](https://img.shields.io/github/stars/huggingface/knockknock.svg?style=social&label=Star&maxAge=1000)](https://github.com/huggingface/knockknock/stargazers/)
 
 A small library to get a notification when your training is complete or when it crashes during the process with two additional lines of code.
@@ -8,6 +9,7 @@ When training deep learning models, it is common to use early stopping. Apart fr
 ## Installation
 
 Install with `pip` or equivalent.
+
 ```bash
 pip install knockknock
 ```
@@ -20,19 +22,21 @@ The library is designed to be used in a seamless way, with minimal code modifica
 
 There are currently *eleven* ways to setup notifications:
 
-| Platform | External Contributors |
-|:---:|:---:|
-| [email](#email) | - |
-| [Slack](#slack) | - |
-| [Telegram](#telegram) | - |
-| [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) |
-| [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) |
-| [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
-| [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz)|
-| [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
-| [Amazon Chime](#amazon-chime) | [@prabhakar267](https://github.com/prabhakar267) |
-| [DingTalk](#dingtalk) | [@wuutiing](https://github.com/wuutiing) |
-| [WeChat Work](#wechat-work) | [@jcyk](https://github.com/jcyk) |
+
+|               Platform                |                                   External Contributors                                   |
+| :-----------------------------------: | :---------------------------------------------------------------------------------------: |
+|            [email](#email)            |                                             -                                             |
+|            [Slack](#slack)            |                                             -                                             |
+|         [Telegram](#telegram)         |                                             -                                             |
+|  [Microsoft Teams](#microsoft-teams)  |                           [@noklam](https://github.com/noklam)                            |
+| [Text Message](<#text-message-(sms)>) |                 [@abhishekkrthakur](https://github.com/abhishekkrthakur)                  |
+|          [Discord](#discord)          |                         [@watkinsm](https://github.com/watkinsm)                          |
+|   [Desktop](#desktop-notification)    | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz) |
+|           [Matrix](#matrix)           |                           [@jcklie](https://github.com/jcklie)                            |
+|     [Amazon Chime](#amazon-chime)     |                     [@prabhakar267](https://github.com/prabhakar267)                      |
+|         [DingTalk](#dingtalk)         |                         [@wuutiing](https://github.com/wuutiing)                          |
+|       [RocketChat](#rocketchat)       |                            [@radao](https://github.com/radao)                             |
+|      [WeChat Work](#wechat-work)      |                             [@jcyk](https://github.com/jcyk)                              |
 
 
 ### Email
@@ -64,7 +68,6 @@ If `sender_email` is not specified, then the first email in `recipient_emails` w
 
 Note that launching this will asks you for the sender's email password. It will be safely stored in the system keyring service through the [`keyring` Python library](https://pypi.org/project/keyring/).
 
-
 ### Slack
 
 Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [webhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your [user id](https://api.slack.com/methods/users.identity) (if you want to tag yourself or someone else).
@@ -95,7 +98,6 @@ knockknock slack \
 
 You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
 
-
 ### Telegram
 
 You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
@@ -124,7 +126,6 @@ knockknock telegram \
     sleep 10
 ```
 
-
 ### Microsoft Teams
 
 Thanks to [@noklam](https://github.com/noklam), you can also use Microsoft Teams to get notifications. You'll have to get your Team Channel [webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using).
@@ -150,7 +151,6 @@ knockknock teams \
 ```
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_teams_id>, <grandma's_teams_id>]`.
-
 
 ### Text Message (SMS)
 
@@ -211,7 +211,7 @@ knockknock discord \
 ### Desktop Notification
 
 You can also get notified from a desktop notification. It is currently only available for MacOS and Linux and Windows 10.
-For Linux it uses the nofity-send command which uses libnotify, In order to use libnotify, you have to install a notification server. Cinnamon, Deepin, Enlightenment, GNOME, GNOME Flashback and KDE Plasma use their own implementations to display notifications. In other desktop environments, the notification server needs to be launched using your WM's/DE's "autostart" option. 
+For Linux it uses the nofity-send command which uses libnotify, In order to use libnotify, you have to install a notification server. Cinnamon, Deepin, Enlightenment, GNOME, GNOME Flashback and KDE Plasma use their own implementations to display notifications. In other desktop environments, the notification server needs to be launched using your WM's/DE's "autostart" option.
 
 #### Python
 
@@ -226,6 +226,7 @@ def train_your_nicest_model(your_nicest_parameters):
 ```
 
 #### Command Line
+
 ```bash
 knockknock desktop \
     --title 'Knockknock Desktop Notifier' \
@@ -234,11 +235,11 @@ knockknock desktop \
 
 ### Matrix
 
-Thanks to [@jcklie](https://github.com/jcklie), you can send notifications via [Matrix](https://matrix.org/). The homeserver is the 
+Thanks to [@jcklie](https://github.com/jcklie), you can send notifications via [Matrix](https://matrix.org/). The homeserver is the
 server on which your user that will send messages is registered. Do not forget the schema for the URL (`http` or `https`).
-You'll have to get the access token for a bot or your own user. The easiest way to obtain it is to look into Riot looking 
-in the riot settings, `Help & About`, down the bottom is: `Access Token:<click to reveal>`. You also need to specify a 
-room alias to which messages are sent. To obtain the alias in Riot, create a room you want to use, then open the room 
+You'll have to get the access token for a bot or your own user. The easiest way to obtain it is to look into Riot looking
+in the riot settings, `Help & About`, down the bottom is: `Access Token:<click to reveal>`. You also need to specify a
+room alias to which messages are sent. To obtain the alias in Riot, create a room you want to use, then open the room
 settings under `Room Addresses` and add an alias.
 
 #### Python
@@ -323,15 +324,56 @@ knockknock dingtalk \
 
 You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_tag>"]`.
 
-### WeChat Work
 
-WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given WeChat Work chatroom robot's webhook url, your notifications will be sent to reach anyone in that chatroom.
+
+### RocketChat
+
+You can use [RocketChat](https://rocket.chat/) to get notifications. You'll need the following before you can post notifications:
+
+- a RocketChat server e.g. rocketchat.yourcompany.com
+- a RocketChat user id (you'll be able to view your user id when you create a personal access token in the next step)
+- a RocketChat personal access token ([create one as per this guide](https://rocket.chat/docs/developer-guides/rest-api/personal-access-tokens/))
+- a RocketChat channel
+
 
 #### Python
 
 ```python
+
+from knockknock import rocketchat_sender
+
+@rocketchat_sender(
+    rocketchat_server_url="<url_to_your_rocketchat_server>",
+    rocketchat_user_id="<your_rocketchat_user_id>",
+    rocketchat_auth_token="<your_rocketchat_auth_token>",
+    channel="<channel_name>")
+```
+
+You can also specify two optional arguments:
+
+- to tag specific users: `user_mentions=[<your_user_name>, <grandma's_user_name>]`
+- to use an alias for the notification: `alias="My Alias"`
+
+#### Command-line
+
+```bash
+knockknock rocketchat \
+    --rocketchat-server-url <url_to_your_rocketchat_server> \
+    --rocketchat-user-id <your_rocketchat_user_id> \
+    --rocketchat-auth-token <your_rocketchat_auth_token> \
+    --channel <channel_name> \
+    sleep 10
+```
+
+
+### WeChat Work
+
+WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given WeChat Work chatroom robot's webhook url, your notifications will be sent to reach anyone in that chatroom.
 from knockknock import wechat_sender
 
+#### Python
+
+```python
 webhook_url = "<webhook_url_to_your_wechat_work_chatroom_robot>"
 @wechat_sender(webhook_url=webhook_url)
 def train_your_nicest_model(your_nicest_parameters):
@@ -349,6 +391,7 @@ knockknock wechat \
 ```
 
 You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
+
 
 
 ## Note on distributed training
