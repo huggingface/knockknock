@@ -20,8 +20,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *eleven* ways to setup notifications:
-
+There are currently *twelve* ways to setup notifications:
 
 |               Platform                |                                   External Contributors                                   |
 | :-----------------------------------: | :---------------------------------------------------------------------------------------: |
@@ -68,6 +67,7 @@ If `sender_email` is not specified, then the first email in `recipient_emails` w
 
 Note that launching this will asks you for the sender's email password. It will be safely stored in the system keyring service through the [`keyring` Python library](https://pypi.org/project/keyring/).
 
+
 ### Slack
 
 Similarly, you can also use Slack to get notifications. You'll have to get your Slack room [webhook URL](https://api.slack.com/incoming-webhooks#create_a_webhook) and optionally your [user id](https://api.slack.com/methods/users.identity) (if you want to tag yourself or someone else).
@@ -98,6 +98,7 @@ knockknock slack \
 
 You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
 
+
 ### Telegram
 
 You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
@@ -126,6 +127,7 @@ knockknock telegram \
     sleep 10
 ```
 
+
 ### Microsoft Teams
 
 Thanks to [@noklam](https://github.com/noklam), you can also use Microsoft Teams to get notifications. You'll have to get your Team Channel [webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using).
@@ -151,6 +153,7 @@ knockknock teams \
 ```
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_teams_id>, <grandma's_teams_id>]`.
+
 
 ### Text Message (SMS)
 
@@ -325,7 +328,6 @@ knockknock dingtalk \
 You can also specify an optional argument to at specific people: `user_mentions=["<list_of_phonenumbers_who_you_want_to_tag>"]`.
 
 
-
 ### RocketChat
 
 You can use [RocketChat](https://rocket.chat/) to get notifications. You'll need the following before you can post notifications:
@@ -335,11 +337,9 @@ You can use [RocketChat](https://rocket.chat/) to get notifications. You'll need
 - a RocketChat personal access token ([create one as per this guide](https://rocket.chat/docs/developer-guides/rest-api/personal-access-tokens/))
 - a RocketChat channel
 
-
 #### Python
 
 ```python
-
 from knockknock import rocketchat_sender
 
 @rocketchat_sender(
@@ -347,6 +347,10 @@ from knockknock import rocketchat_sender
     rocketchat_user_id="<your_rocketchat_user_id>",
     rocketchat_auth_token="<your_rocketchat_auth_token>",
     channel="<channel_name>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
 ```
 
 You can also specify two optional arguments:
@@ -392,7 +396,6 @@ knockknock wechat \
 ```
 
 You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
-
 
 
 ## Note on distributed training
