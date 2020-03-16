@@ -11,7 +11,8 @@ from knockknock import (chime_sender,
                         slack_sender,
                         sms_sender,
                         teams_sender,
-                        telegram_sender,)
+                        telegram_sender,
+                        wechat_sender,)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -172,6 +173,21 @@ def main():
     rocketchat_parser.add_argument(
         "--alias", type=str, required=False, default="", help="Optional alias to use for the notification.")
     rocketchat_parser.set_defaults(sender_func=rocketchat_sender)
+
+    # WeChat Work
+    wechat_parser = subparsers.add_parser(
+        name="wechat", description="Send a WeChat Work message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    wechat_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your wechat_work chatroom")
+    wechat_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional userids to notify (use '@all' for all group members), as comma seperated list.")
+    wechat_parser.add_argument(
+        "--user-mentions-mobile", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user phone numbers to notify (use '@all' for all group members), as comma seperated list.")
+    wechat_parser.set_defaults(sender_func=wechat_sender)
 
     args, remaining_args = parser.parse_known_args()
     args = vars(args)
