@@ -369,11 +369,12 @@ knockknock rocketchat \
 ### WeChat Work
 
 WeChat Work is now supported thanks to [@jcyk](https://github.com/jcyk). Given WeChat Work chatroom robot's webhook url, your notifications will be sent to reach anyone in that chatroom.
-from knockknock import wechat_sender
 
 #### Python
 
 ```python
+from knockknock import wechat_sender
+
 webhook_url = "<webhook_url_to_your_wechat_work_chatroom_robot>"
 @wechat_sender(webhook_url=webhook_url)
 def train_your_nicest_model(your_nicest_parameters):
