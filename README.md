@@ -116,6 +116,11 @@ def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
     return {'loss': 0.9} # Optional return value
+
+#For sending direct message to telegram(Optional)
+from knockknock import telegram_print
+
+telegram_print(text="<your_text>",token=token="<your_api_token>", chat_id=CHAT_ID)
 ```
 
 #### Command-line
