@@ -95,3 +95,10 @@ def telegram_sender(token: str, chat_id: int):
         return wrapper_sender
 
     return decorator_sender
+
+
+def telegram_print(text:str,token: str, chat_id: int):
+    # telegram print sends the message to the telegram 
+    # Ex: It can be used to send loss,accuracy during each epoch
+     bot = telegram.Bot(token=token)
+     bot.send_message(chat_id=chat_id, text=text)
