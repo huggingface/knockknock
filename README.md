@@ -120,7 +120,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #For sending direct message to telegram(Optional)
 from knockknock import telegram_print
 
-telegram_print(text="<your_text>",token=token="<your_api_token>", chat_id=CHAT_ID)
+telegram_print(text="<your_text>",token="<your_api_token>", chat_id=CHAT_ID)
 ```
 
 #### Command-line
