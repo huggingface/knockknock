@@ -23,6 +23,5 @@ jobs:
       - run: codespell --quiet-level=2 || true  # --ignore-words-list="" --skip=""
       - run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
       - run: isort --recursive . || true
-      - run: pip install -r requirements.txt || true
-      - run: python setup.py
+      - run: pip install -r requirements.txt
       - run: pytest . || true
