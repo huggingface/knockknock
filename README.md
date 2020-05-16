@@ -22,20 +22,21 @@ The library is designed to be used in a seamless way, with minimal code modifica
 
 There are currently *twelve* ways to setup notifications:
 
-|               Platform                |                                   External Contributors                                   |
-| :-----------------------------------: | :---------------------------------------------------------------------------------------: |
-|            [email](#email)            |                                             -                                             |
-|            [Slack](#slack)            |                                             -                                             |
-|         [Telegram](#telegram)         |                                             -                                             |
-|  [Microsoft Teams](#microsoft-teams)  |                           [@noklam](https://github.com/noklam)                            |
-| [Text Message](<#text-message-(sms)>) |                 [@abhishekkrthakur](https://github.com/abhishekkrthakur)                  |
-|          [Discord](#discord)          |                         [@watkinsm](https://github.com/watkinsm)                          |
+|               Platform                |                    External Contributors                     |
+| :-----------------------------------: | :----------------------------------------------------------: |
+|            [email](#email)            |                              -                               |
+|            [Slack](#slack)            |                              -                               |
+|         [Telegram](#telegram)         |                              -                               |
+|  [Microsoft Teams](#microsoft-teams)  |             [@noklam](https://github.com/noklam)             |
+| [Text Message](<#text-message-(sms)>) |   [@abhishekkrthakur](https://github.com/abhishekkrthakur)   |
+|          [Discord](#discord)          |           [@watkinsm](https://github.com/watkinsm)           |
 |   [Desktop](#desktop-notification)    | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz) |
-|           [Matrix](#matrix)           |                           [@jcklie](https://github.com/jcklie)                            |
-|     [Amazon Chime](#amazon-chime)     |                     [@prabhakar267](https://github.com/prabhakar267)                      |
-|         [DingTalk](#dingtalk)         |                         [@wuutiing](https://github.com/wuutiing)                          |
-|       [RocketChat](#rocketchat)       |                            [@radao](https://github.com/radao)                             |
-|      [WeChat Work](#wechat-work)      |                             [@jcyk](https://github.com/jcyk)                              |
+|           [Matrix](#matrix)           |             [@jcklie](https://github.com/jcklie)             |
+|     [Amazon Chime](#amazon-chime)     |       [@prabhakar267](https://github.com/prabhakar267)       |
+|         [DingTalk](#dingtalk)         |           [@wuutiing](https://github.com/wuutiing)           |
+|       [RocketChat](#rocketchat)       |              [@radao](https://github.com/radao)              |
+|      [WeChat Work](#wechat-work)      |               [@jcyk](https://github.com/jcyk)               |
+|       [Mattermost](#mattermost)       |            [@kinoute](https://github.com/kinoute)            |
 
 
 ### Email
@@ -396,6 +397,40 @@ knockknock wechat \
 ```
 
 You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
+
+
+
+### Mattermost
+
+You can also use Mattermost to get notifications just like you will do for Slack (added by [@kinoute](https://github.com/kinoute)). You'll have to get your Mattermost room [webhook URL](https://docs.mattermost.com/developer/webhooks-incoming.html#simple-incoming-webhook).
+
+#### Python
+
+```python
+from knockknock import mattermost_sender
+
+webhook_url = "<webhook_url_to_your_mattermost_room>"
+@mattermost_sender(webhook_url=webhook_url, channel="<your_favorite_mattermost_channel>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_id>, <grandma's_slack_id>]`.
+
+#### Command-line
+
+```bash
+knockknock mattermost \
+    --webhook-url <webhook_url_to_your_mattermost_room> \
+    --channel <your_favorite_mattermost_channel> \
+    sleep 10
+```
+
+You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
+
+
 
 
 ## Note on distributed training
