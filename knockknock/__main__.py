@@ -7,6 +7,7 @@ from knockknock import (chime_sender,
                         discord_sender,
                         email_sender,
                         matrix_sender,
+                        mattermost_sender,
                         rocketchat_sender,
                         slack_sender,
                         sms_sender,
@@ -150,6 +151,20 @@ def main():
         "--room", type=str, required=True,
         help="The alias of the room to which messages will be send by the BOT.")
     matrix_parser.set_defaults(sender_func=matrix_sender)
+
+    # Mattermost
+    mattermost_parser = subparsers.add_parser(
+        name="mattermost", description="Send a Mattermost message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    mattermost_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your mattermost channel.")
+    mattermost_parser.add_argument(
+        "--channel", type=str, required=True, help="The mattermost room to log.")
+    mattermost_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user ids to notify, as comma seperated list.")
+    mattermost_parser.set_defaults(sender_func=mattermost_sender)
 
     # RocketChat
     rocketchat_parser = subparsers.add_parser(

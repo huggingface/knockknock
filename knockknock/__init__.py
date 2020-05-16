@@ -10,3 +10,4 @@ from knockknock.matrix_sender import matrix_sender
 from knockknock.dingtalk_sender import dingtalk_sender
 from knockknock.wechat_sender import wechat_sender
 from knockknock.rocketchat_sender import rocketchat_sender
+from knockknock.mattermost_sender import mattermost_sender
