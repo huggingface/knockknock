@@ -22,20 +22,20 @@ The library is designed to be used in a seamless way, with minimal code modifica
 
 There are currently *twelve* ways to setup notifications:
 
-|               Platform                |                                   External Contributors                                   |
-| :-----------------------------------: | :---------------------------------------------------------------------------------------: |
-|            [email](#email)            |                                             -                                             |
-|            [Slack](#slack)            |                                             -                                             |
-|         [Telegram](#telegram)         |                                             -                                             |
-|  [Microsoft Teams](#microsoft-teams)  |                           [@noklam](https://github.com/noklam)                            |
-| [Text Message](<#text-message-(sms)>) |                 [@abhishekkrthakur](https://github.com/abhishekkrthakur)                  |
-|          [Discord](#discord)          |                         [@watkinsm](https://github.com/watkinsm)                          |
-|   [Desktop](#desktop-notification)    | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz) |
-|           [Matrix](#matrix)           |                           [@jcklie](https://github.com/jcklie)                            |
-|     [Amazon Chime](#amazon-chime)     |                     [@prabhakar267](https://github.com/prabhakar267)                      |
-|         [DingTalk](#dingtalk)         |                         [@wuutiing](https://github.com/wuutiing)                          |
-|       [RocketChat](#rocketchat)       |                            [@radao](https://github.com/radao)                             |
-|      [WeChat Work](#wechat-work)      |                             [@jcyk](https://github.com/jcyk)                              |
+|              Platform               |                                   External Contributors                                   |
+| :---------------------------------: | :---------------------------------------------------------------------------------------: |
+|           [email](#email)           |                                             -                                             |
+|           [Slack](#slack)           |                                             -                                             |
+|        [Telegram](#telegram)        |                                             -                                             |
+| [Microsoft Teams](#microsoft-teams) |                           [@noklam](https://github.com/noklam)                            |
+|  [Text Message](#text-message-sms)  |                 [@abhishekkrthakur](https://github.com/abhishekkrthakur)                  |
+|         [Discord](#discord)         |                         [@watkinsm](https://github.com/watkinsm)                          |
+|  [Desktop](#desktop-notification)   | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz) |
+|          [Matrix](#matrix)          |                           [@jcklie](https://github.com/jcklie)                            |
+|    [Amazon Chime](#amazon-chime)    |                     [@prabhakar267](https://github.com/prabhakar267)                      |
+|        [DingTalk](#dingtalk)        |                         [@wuutiing](https://github.com/wuutiing)                          |
+|      [RocketChat](#rocketchat)      |                            [@radao](https://github.com/radao)                             |
+|     [WeChat Work](#wechat-work)     |                             [@jcyk](https://github.com/jcyk)                              |
 
 
 ### Email
