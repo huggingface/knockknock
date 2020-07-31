@@ -9,7 +9,7 @@ from twilio.rest import Client
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def sms_sender(account_sid: str, auth_token: str, recipient_number: str, sender_number: str):
-    client = Client(account_sid, auth_token)
+
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
@@ -34,8 +34,13 @@ def sms_sender(account_sid: str, auth_token: str, recipient_number: str, sender_
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                text = '\n'.join(contents)
-                client.messages.create(body=text, from_=sender_number, to=recipient_number)
+                send_on_sms(
+                    '\n'.join(contents),
+                    account_sid,
+                    auth_token,
+                    recipient_number,
+                    sender_number
+                )
 
             try:
                 value = func(*args, **kwargs)
@@ -56,8 +61,13 @@ def sms_sender(account_sid: str, auth_token: str, recipient_number: str, sender_
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    text = '\n'.join(contents)
-                    client.messages.create(body=text, from_=sender_number, to=recipient_number)
+                    send_on_sms(
+                        '\n'.join(contents),
+                        account_sid,
+                        auth_token,
+                        recipient_number,
+                        sender_number
+                    )
 
                 return value
 
@@ -74,10 +84,24 @@ def sms_sender(account_sid: str, auth_token: str, recipient_number: str, sender_
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                text = '\n'.join(contents)
-                client.messages.create(body=text, from_=sender_number, to=recipient_number)
+                send_on_sms(
+                    '\n'.join(contents),
+                    account_sid,
+                    auth_token,
+                    recipient_number,
+                    sender_number
+                )
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+def send_on_sms(
+        contents: str,
+        account_sid: str,
+        auth_token: str,
+        recipient_number: str,
+        sender_number: str):
+    client = Client(account_sid, auth_token)
+    client.messages.create(body=contents, from_=sender_number, to=recipient_number)

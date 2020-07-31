@@ -8,7 +8,7 @@ import socket
 import requests
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-
+USERNAME = "Knock Knock"
 
 def teams_sender(webhook_url: str, user_mentions: List[str] = []):
     """
@@ -22,11 +22,6 @@ def teams_sender(webhook_url: str, user_mentions: List[str] = []):
     `user_mentions`: List[str] (default=[])
         Optional users ids to notify.
     """
-
-    dump = {
-        "username": "Knock Knock",
-        "icon_emoji": ":clapper:",
-    }
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -52,10 +47,12 @@ def teams_sender(webhook_url: str, user_mentions: List[str] = []):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                contents.append(' '.join(user_mentions))
-                dump['text'] = '\n'.join(contents)
-                dump['icon_emoji'] = ':clapper:'
-                requests.post(webhook_url, json.dumps(dump))
+                send_on_teams(
+                    '\n'.join(contents),
+                    webhook_url,
+                    user_mentions,
+                    ":clapper:"
+                )
 
             try:
                 value = func(*args, **kwargs)
@@ -80,10 +77,12 @@ def teams_sender(webhook_url: str, user_mentions: List[str] = []):
                         contents.append('Main call returned value: %s' %
                                         "ERROR - Couldn't str the returned value.")
 
-                    contents.append(' '.join(user_mentions))
-                    dump['text'] = '\n'.join(contents)
-                    dump['icon_emoji'] = ':tada:'
-                    requests.post(webhook_url, json.dumps(dump))
+                    send_on_teams(
+                        '\n'.join(contents),
+                        webhook_url,
+                        user_mentions,
+                        ":tada:"
+                    )
 
                 return value
 
@@ -102,12 +101,33 @@ def teams_sender(webhook_url: str, user_mentions: List[str] = []):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                contents.append(' '.join(user_mentions))
-                dump['text'] = '\n'.join(contents)
-                dump['icon_emoji'] = ':skull_and_crossbones:'
-                requests.post(webhook_url, json.dumps(dump))
+                send_on_teams(
+                    '\n'.join(contents),
+                    webhook_url,
+                    user_mentions,
+                    ":skull_and_crossbones:"
+                )
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+def send_on_teams(
+        contents: str,
+        webhook_url: str,
+        user_mentions: List[str] = [],
+        icon_emoji: str = ":clapper:"):
+
+    contents = "{}\n{}".format(
+        contents,
+        contents.append(' '.join(user_mentions))
+    )
+
+    dump = {
+        "username": USERNAME,
+        "text": contents,
+        "icon_emoji": icon_emoji
+    }
+
+    requests.post(webhook_url, json.dumps(dump))

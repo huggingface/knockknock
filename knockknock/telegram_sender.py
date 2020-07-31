@@ -23,7 +23,6 @@ def telegram_sender(token: str, chat_id: int):
         message['chat']['id'])
     """
 
-    bot = telegram.Bot(token=token)
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
@@ -48,8 +47,7 @@ def telegram_sender(token: str, chat_id: int):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                text = '\n'.join(contents)
-                bot.send_message(chat_id=chat_id, text=text)
+                send_on_telegram('\n'.join(contents), token, chat_id)
 
             try:
                 value = func(*args, **kwargs)
@@ -70,8 +68,7 @@ def telegram_sender(token: str, chat_id: int):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    text = '\n'.join(contents)
-                    bot.send_message(chat_id=chat_id, text=text)
+                    send_on_telegram('\n'.join(contents), token, chat_id)
 
                 return value
 
@@ -88,10 +85,18 @@ def telegram_sender(token: str, chat_id: int):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                text = '\n'.join(contents)
-                bot.send_message(chat_id=chat_id, text=text)
+                send_on_telegram('\n'.join(contents), token, chat_id)
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_telegram(
+        contents: str,
+        token: str,
+        chat_id: int):
+
+    bot = telegram.Bot(token=token)
+    bot.send_message(chat_id=chat_id, text=contents)
