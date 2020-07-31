@@ -9,26 +9,6 @@ import platform
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def desktop_sender(title: str = "knockknock"):
-    
-    def show_notification(text: str, title: str):
-        # Check the OS
-        if platform.system() == "Darwin":     
-            subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
-        
-        elif platform.system() == "Linux":
-            subprocess.run(["notify-send", title, text])
-        
-        elif platform.system() == "Windows":
-            try:
-                from win10toast import ToastNotifier
-            except ImportError as err:
-                print('Error: to use Windows Desktop Notifications, you need to install `win10toast` first. Please run `pip install win10toast==0.9`.')
-
-            toaster = ToastNotifier()
-            toaster.show_toast(title,
-                               text,
-                               icon_path=None,
-                               duration=5)
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -54,8 +34,7 @@ def desktop_sender(title: str = "knockknock"):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                text = '\n'.join(contents)
-                show_notification(text, title)
+                send_on_desktop('\n'.join(contents), title)
 
             try:
                 value = func(*args, **kwargs)
@@ -76,8 +55,7 @@ def desktop_sender(title: str = "knockknock"):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    text = '\n'.join(contents)
-                    show_notification(text, title)
+                    send_on_desktop('\n'.join(contents), title)
 
                 return value
 
@@ -94,10 +72,34 @@ def desktop_sender(title: str = "knockknock"):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                text = '\n'.join(contents)
-                show_notification(text, title)
+                send_on_desktop('\n'.join(contents), title)
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_desktop(
+    contents: str,
+    title: str = "knockknock"):
+    # Check the OS
+    if platform.system() == "Darwin":
+        subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (contents, title)])
+
+    elif platform.system() == "Linux":
+        subprocess.run(["notify-send", title, contents])
+
+    elif platform.system() == "Windows":
+        try:
+            from win10toast import ToastNotifier
+        except ImportError as err:
+            print('Error: to use Windows Desktop Notifications, you need to install `win10toast` first. Please run `pip install win10toast==0.9`.')
+
+        toaster = ToastNotifier()
+        toaster.show_toast(
+            title,
+            contents,
+            icon_path=None,
+            duration=5
+        )

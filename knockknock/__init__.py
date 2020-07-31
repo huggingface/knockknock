@@ -1,12 +1,12 @@
-from knockknock.chime_sender import chime_sender
-from knockknock.discord_sender import discord_sender
-from knockknock.email_sender import email_sender
-from knockknock.slack_sender import slack_sender
-from knockknock.sms_sender import sms_sender
-from knockknock.telegram_sender import telegram_sender
-from knockknock.teams_sender import teams_sender
-from knockknock.desktop_sender import desktop_sender
-from knockknock.matrix_sender import matrix_sender
-from knockknock.dingtalk_sender import dingtalk_sender
-from knockknock.wechat_sender import wechat_sender
-from knockknock.rocketchat_sender import rocketchat_sender
+from knockknock.chime_sender import chime_sender, send_on_chime
+from knockknock.discord_sender import discord_sender, send_on_discord
+from knockknock.email_sender import email_sender, send_on_email
+from knockknock.slack_sender import slack_sender, send_on_slack
+from knockknock.sms_sender import sms_sender, send_on_sms
+from knockknock.telegram_sender import telegram_sender, send_on_telegram
+from knockknock.teams_sender import teams_sender, send_on_teams
+from knockknock.desktop_sender import desktop_sender, send_on_desktop
+from knockknock.matrix_sender import matrix_sender, send_on_matrix
+from knockknock.dingtalk_sender import dingtalk_sender, send_on_dingtalk
+from knockknock.wechat_sender import wechat_sender, send_on_wechat
+from knockknock.rocketchat_sender import rocketchat_sender, send_on_rocketchat

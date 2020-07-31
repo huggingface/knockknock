@@ -4,8 +4,10 @@ import traceback
 import functools
 import socket
 import yagmail
+from typing import Union
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+DEFAULT_EMAIL_SUBJECT = "Message from Knock Knock"
 
 def email_sender(recipient_emails: list, sender_email: str = None):
     """
@@ -20,9 +22,6 @@ def email_sender(recipient_emails: list, sender_email: str = None):
         address as the first recipient email in `recipient_emails`
         if length of `recipient_emails` is more than 0.
     """
-    if sender_email is None and len(recipient_emails) > 0:
-        sender_email = recipient_emails[0]
-    yag_sender = yagmail.SMTP(sender_email)
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -48,9 +47,7 @@ def email_sender(recipient_emails: list, sender_email: str = None):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                for i in range(len(recipient_emails)):
-                    current_recipient = recipient_emails[i]
-                    yag_sender.send(current_recipient, 'Training has started 🎬', contents)
+                send_on_email('Training has started 🎬', contents, recipient_emails, sender_email)
             try:
                 value = func(*args, **kwargs)
 
@@ -70,9 +67,7 @@ def email_sender(recipient_emails: list, sender_email: str = None):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    for i in range(len(recipient_emails)):
-                        current_recipient = recipient_emails[i]
-                        yag_sender.send(current_recipient, 'Training has sucessfully finished 🎉', contents)
+                    send_on_email('Training has successfully finished 🎉', contents, recipient_emails, sender_email)
 
                 return value
 
@@ -89,11 +84,23 @@ def email_sender(recipient_emails: list, sender_email: str = None):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                for i in range(len(recipient_emails)):
-                    current_recipient = recipient_emails[i]
-                    yag_sender.send(current_recipient, 'Training has crashed ☠️', contents)
+                send_on_email('Training has crashed ☠️', contents, recipient_emails, sender_email)
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+def send_on_email(
+        contents: Union[str, list],
+        recipient_emails: list,
+        sender_email: str = None,
+        subject: str = DEFAULT_EMAIL_SUBJECT):
+    if sender_email is None and len(recipient_emails) > 0:
+        sender_email = recipient_emails[0]
+
+    yag_sender = yagmail.SMTP(sender_email)
+
+    for i in range(len(recipient_emails)):
+        current_recipient = recipient_emails[i]
+        yag_sender.send(current_recipient, subject, contents)

@@ -8,6 +8,7 @@ import socket
 import requests
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+USERNAME = "Knock Knock"
 
 def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     """
@@ -25,11 +26,6 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
         Visit https://api.slack.com/methods/users.identity for more details.
     """
 
-    dump = {
-        "username": "Knock Knock",
-        "channel": channel,
-        "icon_emoji": ":clapper:",
-    }
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
@@ -54,11 +50,13 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                contents.append(' '.join(user_mentions))
-                dump['text'] = '\n'.join(contents)
-                dump['icon_emoji'] = ':clapper:'
-                requests.post(webhook_url, json.dumps(dump))
-
+                send_on_slack(
+                    '\n'.join(contents),
+                    webhook_url,
+                    channel,
+                    user_mentions,
+                    ":clapper:"
+                )
             try:
                 value = func(*args, **kwargs)
 
@@ -78,10 +76,14 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    contents.append(' '.join(user_mentions))
-                    dump['text'] = '\n'.join(contents)
-                    dump['icon_emoji'] = ':tada:'
-                    requests.post(webhook_url, json.dumps(dump))
+                    send_on_slack(
+                        '\n'.join(contents),
+                        webhook_url,
+                        channel,
+                        user_mentions,
+                        ":tada:"
+                    )
+
 
                 return value
 
@@ -98,12 +100,38 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                contents.append(' '.join(user_mentions))
-                dump['text'] = '\n'.join(contents)
-                dump['icon_emoji'] = ':skull_and_crossbones:'
-                requests.post(webhook_url, json.dumps(dump))
+
+                send_on_slack(
+                    '\n'.join(contents),
+                    webhook_url,
+                    channel,
+                    user_mentions,
+                    ":skull_and_crossbones:"
+                )
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_slack(
+        contents: str,
+        webhook_url: str,
+        channel: str,
+        user_mentions: List[str] = [],
+        icon_emoji: str = ":clapper:"):
+
+    contents = "{}\n{}".format(
+        contents,
+        contents.append(' '.join(user_mentions))
+    )
+
+    dump = {
+        "username": USERNAME,
+        "text": contents,
+        "channel": channel,
+        "icon_emoji": icon_emoji
+    }
+
+    requests.post(webhook_url, json.dumps(dump))

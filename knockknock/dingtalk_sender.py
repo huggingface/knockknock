@@ -40,30 +40,6 @@ def dingtalk_sender(webhook_url: str,
         see `secret`
 
     """
-    msg_template = {
-        "msgtype": "text", 
-        "text": {
-            "content": ""
-        }, 
-        "at": {
-            "atMobiles": user_mentions,
-            "isAtAll": False
-        }
-    }
-
-    def _construct_encrypted_url():
-        '''
-        Visit https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq for details
-        '''
-        timestamp = round(datetime.datetime.now().timestamp() * 1000)
-        secret_enc = secret.encode('utf-8')
-        string_to_sign = '{}\n{}'.format(timestamp, secret)
-        string_to_sign_enc = string_to_sign.encode('utf-8')
-        hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
-        sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))
-        encrypted_url = webhook_url + '&timestamp={}'.format(timestamp) \
-                        + '&sign={}'.format(sign) 
-        return encrypted_url
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -89,15 +65,13 @@ def dingtalk_sender(webhook_url: str,
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                contents.extend(['@{}'.format(i) for i in user_mentions])
-                contents.extend(keywords)
-                
-                msg_template['text']['content'] = '\n'.join(contents)
-                if secret:
-                    postto = _construct_encrypted_url()
-                    requests.post(postto, json=msg_template)
-                else:
-                    requests.post(webhook_url, json=msg_template)
+                send_on_dingtalk(
+                    '\n'.join(contents),
+                    webhook_url,
+                    user_mentions,
+                    secret,
+                    keywords
+                )
 
             try:
                 value = func(*args, **kwargs)
@@ -118,16 +92,14 @@ def dingtalk_sender(webhook_url: str,
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    contents.extend(['@{}'.format(i) for i in user_mentions])
-                    contents.extend(keywords)
+                    send_on_dingtalk(
+                        '\n'.join(contents),
+                        webhook_url,
+                        user_mentions,
+                        secret,
+                        keywords
+                    )
 
-                    msg_template['text']['content'] = '\n'.join(contents)
-                    if secret:
-                        postto = _construct_encrypted_url()
-                        requests.post(postto, json=msg_template)
-                    else:
-                        requests.post(webhook_url, json=msg_template)
-                        print(msg_template)
 
                 return value
 
@@ -144,19 +116,62 @@ def dingtalk_sender(webhook_url: str,
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                contents.extend(['@{}'.format(i) for i in user_mentions])
-                contents.extend(keywords)
-                
-                msg_template['text']['content'] = '\n'.join(contents)
-                if secret:
-                    postto = _construct_encrypted_url()
-                    requests.post(postto, json=msg_template)
-                else:
-                    requests.post(webhook_url, json=msg_template)
-                    print(msg_template)
+                send_on_dingtalk(
+                    '\n'.join(contents),
+                    webhook_url,
+                    user_mentions,
+                    secret,
+                    keywords
+                )
 
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_dingtalk(
+        contents: str,
+        webhook_url: str,
+        user_mentions: List[str] = [],
+        secret: str = '',
+        keywords: List[str] = []):
+
+    def _construct_encrypted_url():
+        '''
+        Visit https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq for details
+        '''
+        timestamp = round(datetime.datetime.now().timestamp() * 1000)
+        secret_enc = secret.encode('utf-8')
+        string_to_sign = '{}\n{}'.format(timestamp, secret)
+        string_to_sign_enc = string_to_sign.encode('utf-8')
+        hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
+        sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))
+        encrypted_url = webhook_url + '&timestamp={}'.format(timestamp) \
+                        + '&sign={}'.format(sign)
+        return encrypted_url
+
+    contents = "{}\n{}\n{}".format(
+        contents,
+        "\n".join(['@{}'.format(i) for i in user_mentions]),
+        "\n".join(keywords)
+    )
+
+    msg_template = {
+        "msgtype": "text",
+        "text": {
+            "content": contents
+        },
+        "at": {
+            "atMobiles": user_mentions,
+            "isAtAll": False
+        }
+    }
+
+    if secret:
+        postto = _construct_encrypted_url()
+        requests.post(postto, json=msg_template)
+    else:
+        requests.post(webhook_url, json=msg_template)
+        print(msg_template)

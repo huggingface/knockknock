@@ -29,15 +29,6 @@ def wechat_sender(webhook_url: str,
         Optional user's phone numbers to notify (use '@all' for all group members).
         Visit https://work.weixin.qq.com/api/doc/90000/90136/91770 for more details.
     """
-    
-    msg_template = {
-        "msgtype": "text", 
-        "text": {
-            "content": "",
-            "mentioned_list":user_mentions,
-            "mentioned_mobile_list":user_mentions_mobile
-        }
-    }
 
     def decorator_sender(func):
         @functools.wraps(func)
@@ -63,9 +54,13 @@ def wechat_sender(webhook_url: str,
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                
-                msg_template['text']['content'] = '\n'.join(contents)
-                requests.post(webhook_url, json=msg_template)
+
+                send_on_wechat(
+                    '\n'.join(contents),
+                    webhook_url,
+                    user_mentions,
+                    user_mentions_mobile
+                )
 
             try:
                 value = func(*args, **kwargs)
@@ -86,10 +81,13 @@ def wechat_sender(webhook_url: str,
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    
-                    msg_template['text']['content'] = '\n'.join(contents)
-                    requests.post(webhook_url, json=msg_template)
-                    print(msg_template)
+
+                    send_on_wechat(
+                        '\n'.join(contents),
+                        webhook_url,
+                        user_mentions,
+                        user_mentions_mobile
+                    )
 
                 return value
 
@@ -106,13 +104,36 @@ def wechat_sender(webhook_url: str,
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                
-                msg_template['text']['content'] = '\n'.join(contents)
-                requests.post(webhook_url, json=msg_template)
-                print(msg_template)
+
+                send_on_wechat(
+                    '\n'.join(contents),
+                    webhook_url,
+                    user_mentions,
+                    user_mentions_mobile
+                )
 
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_wechat(
+        contents: str,
+        webhook_url: str,
+        user_mentions: List[str] = [],
+        user_mentions_mobile: List[str] = []):
+
+    msg_template = {
+        "msgtype": "text",
+        "text": {
+            "content": contents,
+            "mentioned_list": user_mentions,
+            "mentioned_mobile_list": user_mentions_mobile
+        }
+    }
+
+    requests.post(webhook_url, json=msg_template)
+
+    print(msg_template)

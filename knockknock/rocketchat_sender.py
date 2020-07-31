@@ -38,24 +38,9 @@ def rocketchat_sender(rocketchat_server_url: str,
         Optional alias to use for the notification.
     """
 
-    dump = {
-        "alias": alias,
-        "channel": channel,
-        "emoji": ":bell:"
-    }
-
-    headers = {
-        "Content-type": "application/json",
-        "X-Auth-Token": rocketchat_auth_token,
-        "X-User-Id": rocketchat_user_id
-    }
-
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
-
-            webhook_url = urljoin(rocketchat_server_url,
-                                  "/api/v1/chat.postMessage")
 
             start_time = datetime.datetime.now().replace(microsecond=0)
             host_name = socket.gethostname()
@@ -78,11 +63,15 @@ def rocketchat_sender(rocketchat_server_url: str,
                             "**Main call:** %s" % func_name,
                             "**Starting date:** %s" % start_time.strftime(
                                 DATE_FORMAT)]
-                dump["text"] = "\n".join(contents)
-                requests.post(
-                    url=webhook_url,
-                    data=json.dumps(dump),
-                    headers=headers)
+                send_on_rocketchat(
+                    "\n".join(contents),
+                    rocketchat_server_url,
+                    rocketchat_user_id,
+                    rocketchat_auth_token,
+                    channel,
+                    user_mentions,
+                    alias
+                )
 
             try:
                 value = func(*args, **kwargs)
@@ -107,12 +96,15 @@ def rocketchat_sender(rocketchat_server_url: str,
                         contents.append("**Main call returned value:** %s" %
                                         "ERROR - Couldn't str the returned value.")
 
-                    dump["text"] = "\n".join(contents)
-                    requests.post(
-                        url=webhook_url,
-                        data=json.dumps(dump),
-                        headers=headers)
-
+                    send_on_rocketchat(
+                        "\n".join(contents),
+                        rocketchat_server_url,
+                        rocketchat_user_id,
+                        rocketchat_auth_token,
+                        channel,
+                        user_mentions,
+                        alias
+                    )
                 return value
 
             except Exception as ex:
@@ -131,13 +123,49 @@ def rocketchat_sender(rocketchat_server_url: str,
                             "\n%s\n" % ex,
                             "**Traceback:**",
                             "\n%s\n" % traceback.format_exc()]
-                dump["text"] = "\n".join(contents)
-                requests.post(
-                    url=webhook_url,
-                    data=json.dumps(dump),
-                    headers=headers)
+                send_on_rocketchat(
+                    "\n".join(contents),
+                    rocketchat_server_url,
+                    rocketchat_user_id,
+                    rocketchat_auth_token,
+                    channel,
+                    user_mentions,
+                    alias
+                )
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_rocketchat(
+        contents: str,
+        rocketchat_server_url: str,
+        rocketchat_user_id: str,
+        rocketchat_auth_token: str,
+        channel: str,
+        user_mentions: List[str] = [],
+        alias: str = ""):
+
+    webhook_url = urljoin(rocketchat_server_url,
+                        "/api/v1/chat.postMessage")
+
+    headers = {
+        "Content-type": "application/json",
+        "X-Auth-Token": rocketchat_auth_token,
+        "X-User-Id": rocketchat_user_id
+    }
+
+    dump = {
+        "alias": alias,
+        "channel": channel,
+        "emoji": ":bell:",
+        "text": contents
+    }
+
+    requests.post(
+        url=webhook_url,
+        data=json.dumps(dump),
+        headers=headers
+    )

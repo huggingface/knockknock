@@ -28,9 +28,6 @@ def matrix_sender(homeserver: str, token: str, room: str):
         by opening the room settings under 'Room Addresses'.
     """
 
-    matrix = MatrixHttpApi(homeserver, token=token)
-    room_id = matrix.get_room_id(room)
-
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
@@ -55,10 +52,12 @@ def matrix_sender(homeserver: str, token: str, room: str):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                text = '\n'.join(contents)
-
-                matrix.send_message(room_id, text)
-
+                send_on_matrix(
+                    '\n'.join(contents),
+                    homeserver,
+                    token,
+                    room
+                )
             try:
                 value = func(*args, **kwargs)
 
@@ -78,8 +77,12 @@ def matrix_sender(homeserver: str, token: str, room: str):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    text = '\n'.join(contents)
-                    matrix.send_message(room_id, text)
+                    send_on_matrix(
+                        '\n'.join(contents),
+                        homeserver,
+                        token,
+                        room
+                    )
 
                 return value
 
@@ -96,10 +99,28 @@ def matrix_sender(homeserver: str, token: str, room: str):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                text = '\n'.join(contents)
-                matrix.send_message(room_id, text)
+
+                send_on_matrix(
+                    '\n'.join(contents),
+                    homeserver,
+                    token,
+                    room
+                )
+
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_matrix(
+        contents: str,
+        homeserver: str,
+        token: str,
+        room: str):
+
+    matrix = MatrixHttpApi(homeserver, token=token)
+    room_id = matrix.get_room_id(room)
+
+    matrix.send_message(room_id, contents)

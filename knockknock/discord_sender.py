@@ -21,11 +21,7 @@ def discord_sender(webhook_url: str):
         set up your webhook and get your URL.
     """
     def decorator_sender(func):
-        def send_message(text: str):
-            headers = {'Content-Type': 'application/json'}
-            payload = json.dumps({'content': text})
-            r = requests.post(url=webhook_url, data=payload, headers=headers)
-        
+
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
 
@@ -49,8 +45,7 @@ def discord_sender(webhook_url: str):
                             'Machine name: %s' % host_name,
                             'Main call: %s' % func_name,
                             'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                text = '\n'.join(contents)
-                send_message(text=text)
+                send_on_discord('\n'.join(contents), webhook_url)
 
             try:
                 value = func(*args, **kwargs)
@@ -71,8 +66,7 @@ def discord_sender(webhook_url: str):
                     except:
                         contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
 
-                    text = '\n'.join(contents)
-                    send_message(text=text)
+                    send_on_discord('\n'.join(contents), webhook_url)
 
                 return value
 
@@ -89,10 +83,19 @@ def discord_sender(webhook_url: str):
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
-                text = '\n'.join(contents)
-                send_message(text=text)
+                send_on_discord('\n'.join(contents), webhook_url)
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+
+def send_on_discord(
+        contents: str,
+        webhook_url: str):
+
+    headers = {'Content-Type': 'application/json'}
+    payload = json.dumps({'content': contents})
+
+    requests.post(url=webhook_url, data=payload, headers=headers)

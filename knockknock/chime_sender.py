@@ -23,8 +23,6 @@ def chime_sender(webhook_url: str, user_mentions: List[str] = []):
         Optional users alias or full email address to notify.
     """
 
-    dump = {}
-
     def decorator_sender(func):
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
@@ -49,11 +47,13 @@ def chime_sender(webhook_url: str, user_mentions: List[str] = []):
                     'Your training has started 🎬',
                     'Machine name: %s' % host_name,
                     'Main call: %s' % func_name,
-                    'Starting date: %s' % start_time.strftime(DATE_FORMAT),
-                    ' '.join(user_mentions)
+                    'Starting date: %s' % start_time.strftime(DATE_FORMAT)
                 ]
-                dump['Content'] = '\n'.join(contents)
-                requests.post(url=webhook_url, json=dump)
+                send_on_chime(
+                    "\n".join(contents),
+                    webhook_url,
+                    user_mentions
+                )
 
             try:
                 value = func(*args, **kwargs)
@@ -77,9 +77,11 @@ def chime_sender(webhook_url: str, user_mentions: List[str] = []):
                         contents.append('Main call returned value: %s' %
                                         "ERROR - Couldn't str the returned value.")
 
-                    contents.append(' '.join(user_mentions))
-                    dump['Content'] = '\n'.join(contents)
-                    requests.post(url=webhook_url, json=dump)
+                    send_on_chime(
+                        "\n".join(contents),
+                        webhook_url,
+                        user_mentions
+                    )
 
                 return value
 
@@ -94,13 +96,29 @@ def chime_sender(webhook_url: str, user_mentions: List[str] = []):
                     'Crash date: %s' % end_time.strftime(DATE_FORMAT),
                     'Crashed training duration: %s\n\n' % str(elapsed_time),
                     "Here's the error:", '%s\n\n' % ex,
-                    "Traceback:", '%s' % traceback.format_exc(),
-                    ' '.join(user_mentions)
+                    "Traceback:", '%s' % traceback.format_exc()
                 ]
-                dump['Content'] = '\n'.join(contents)
-                requests.post(url=webhook_url, json=dump)
+                send_on_chime(
+                    "\n".join(contents),
+                    webhook_url,
+                    user_mentions
+                )
                 raise ex
 
         return wrapper_sender
 
     return decorator_sender
+
+def send_on_chime(
+    contents: str,
+    webhook_url: str,
+    user_mentions: List[str] = []):
+
+    contents = "{}\n{}".format(
+        contents,
+        contents.append(' '.join(user_mentions))
+    )
+
+    requests.post(url=webhook_url, json={
+        "Content": contents
+    })
