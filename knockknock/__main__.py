@@ -12,7 +12,8 @@ from knockknock import (chime_sender,
                         sms_sender,
                         teams_sender,
                         telegram_sender,
-                        wechat_sender,)
+                        wechat_sender,
+                        line_sender,)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -188,6 +189,15 @@ def main():
         "--user-mentions-mobile", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user phone numbers to notify (use '@all' for all group members), as comma seperated list.")
     wechat_parser.set_defaults(sender_func=wechat_sender)
+
+    # LINE
+    line_parser = subparsers.add_parser(
+        name="line", description="Send a LINE message before and after function " +
+        "execution, with start and end status (successfully or crashed).")
+    line_parser.add_argument(
+        "--token", type=str, required=True,
+        help="The personal access token required to use the LINE Notify API.")
+    line_parser.set_defaults(sender_func=line_sender)
 
     args, remaining_args = parser.parse_known_args()
     args = vars(args)
