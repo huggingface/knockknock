@@ -20,7 +20,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *twelve* ways to setup notifications:
+There are currently *thirteen* ways to setup notifications:
 
 |               Platform                |                                   External Contributors                                   |
 | :-----------------------------------: | :---------------------------------------------------------------------------------------: |
@@ -36,6 +36,7 @@ There are currently *twelve* ways to setup notifications:
 |         [DingTalk](#dingtalk)         |                         [@wuutiing](https://github.com/wuutiing)                          |
 |       [RocketChat](#rocketchat)       |                            [@radao](https://github.com/radao)                             |
 |      [WeChat Work](#wechat-work)      |                             [@jcyk](https://github.com/jcyk)                              |
+|             [LINE](#line)             |                         [@phiradet](https://github.com/phiradet)                          |
 
 
 ### Email
@@ -397,6 +398,31 @@ knockknock wechat \
 
 You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
 
+
+### LINE
+LINE is now supported thanks to [@phiradet](https://github.com/phiradet). You will first have to generate your LINE Notify personal access token from [My page](https://notify-bot.line.me/my/). Please follow the steps explained in the "Generating personal access tokens" section of this [LINE Engineering blog](https://engineering.linecorp.com/en/blog/using-line-notify-to-send-messages-to-line-from-the-command-line/). Your notifications will be sent to you or your selected group.
+
+#### Python
+
+```python
+from knockknock import line_sender
+
+token = "<your_line_notify_personal_access_token>"
+
+@line_sender(token=token)
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9}  # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock line \
+    --token <line_notify_personal_access_token> \
+    sleep 10
+```
 
 ## Note on distributed training
 
