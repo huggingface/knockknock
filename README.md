@@ -28,7 +28,7 @@ There are currently *twelve* ways to setup notifications:
 |            [Slack](#slack)            |                                             -                                             |
 |         [Telegram](#telegram)         |                                             -                                             |
 |  [Microsoft Teams](#microsoft-teams)  |                           [@noklam](https://github.com/noklam)                            |
-| [Text Message](<#text-message-(sms)>) |                 [@abhishekkrthakur](https://github.com/abhishekkrthakur)                  |
+| [Text Message](<#text-message-sms>) |                 [@abhi1thakur](https://github.com/abhi1thakur)                  |
 |          [Discord](#discord)          |                         [@watkinsm](https://github.com/watkinsm)                          |
 |   [Desktop](#desktop-notification)    | [@atakanyenel](https://github.com/atakanyenel) [@eyalmazuz](https://github.com/eyalmazuz) |
 |           [Matrix](#matrix)           |                           [@jcklie](https://github.com/jcklie)                            |
@@ -157,7 +157,7 @@ You can also specify an optional argument to tag specific people: `user_mentions
 
 ### Text Message (SMS)
 
-Thanks to [@abhishekkrthakur](https://github.com/abhishekkrthakur), you can use Twilio to send text message notifications. You'll have to setup a [Twilio](www.twilio.com) account [here](https://www.twilio.com/try-twilio), which is paid service with competitive prices: for instance in the US, getting a new number and sending one text message through this service respectively cost $1.00 and $0.0075. You'll need to get (a) a phone number, (b) your [account SID](https://www.twilio.com/docs/glossary/what-is-a-sid) and (c) your [authentification token](https://www.twilio.com/docs/iam/access-tokens). Some detail [here](https://www.twilio.com/docs/iam/api/account).
+Thanks to [@abhi1thakur](https://github.com/abhi1thakur), you can use Twilio to send text message notifications. You'll have to setup a [Twilio](www.twilio.com) account [here](https://www.twilio.com/try-twilio), which is paid service with competitive prices: for instance in the US, getting a new number and sending one text message through this service respectively cost $1.00 and $0.0075. You'll need to get (a) a phone number, (b) your [account SID](https://www.twilio.com/docs/glossary/what-is-a-sid) and (c) your [authentification token](https://www.twilio.com/docs/iam/access-tokens). Some detail [here](https://www.twilio.com/docs/iam/api/account).
 
 #### Python
 
