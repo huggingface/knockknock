@@ -137,7 +137,7 @@ Thanks to [@noklam](https://github.com/noklam), you can also use Microsoft Teams
 ```python
 from knockknock import teams_sender
 
-@teams_sender(token="<webhook_url_to_your_teams_channel>")
+@teams_sender(webhook_url="<webhook_url_to_your_teams_channel>")
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10)
