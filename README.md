@@ -20,7 +20,7 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
 
-There are currently *twelve* ways to setup notifications:
+There are currently *thirteen* ways to setup notifications:
 
 |               Platform                |                                   External Contributors                                   |
 | :-----------------------------------: | :---------------------------------------------------------------------------------------: |
@@ -36,6 +36,7 @@ There are currently *twelve* ways to setup notifications:
 |         [DingTalk](#dingtalk)         |                         [@wuutiing](https://github.com/wuutiing)                          |
 |       [RocketChat](#rocketchat)       |                            [@radao](https://github.com/radao)                             |
 |      [WeChat Work](#wechat-work)      |                             [@jcyk](https://github.com/jcyk)                              |
+|      [Zoho Cliq](#zoho-cliq)      |                             [@raghul-selvaraj-sj](https://github.com/raghul-selvaraj-sj)      |
 
 
 ### Email
@@ -396,6 +397,33 @@ knockknock wechat \
 ```
 
 You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
+
+
+### Zoho Cliq
+
+Thanks to [@raghul-selvaraj-sj](https://github.com/raghul-selvaraj-sj), you can also use Zoho Cliq to get notifications. You'll have to get your Cliq Channel/Bot [webhook URL](https://www.zoho.com/cliq/help/platform/webhook-tokens.html).
+
+#### Python
+
+```python
+from knockknock import cliq_sender
+
+@cliq_sender(token="<webhook_url_to_your_cliq_channel>")
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock cliq \
+    --webhook-url <webhook_url_to_your_cliq_channel> \
+    sleep 10
+```
+
+You can also specify an optional argument to tag specific people: `user_mentions=[<your_zoho_user_id>, <your_teammate_zoho_user_id>]`.
 
 
 ## Note on distributed training
