@@ -408,7 +408,7 @@ Thanks to [@raghul-selvaraj-sj](https://github.com/raghul-selvaraj-sj), you can 
 ```python
 from knockknock import cliq_sender
 
-@cliq_sender(token="<webhook_url_to_your_cliq_channel>")
+@cliq_sender(webhook_url="<webhook_url_to_your_cliq_channel>")
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10)
