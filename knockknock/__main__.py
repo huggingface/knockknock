@@ -12,7 +12,8 @@ from knockknock import (chime_sender,
                         sms_sender,
                         teams_sender,
                         telegram_sender,
-                        wechat_sender,)
+                        wechat_sender,
+                        cliq_sender, )
 
 def main():
     parser = argparse.ArgumentParser(
@@ -32,6 +33,18 @@ def main():
         "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user alias or full email address to notify, as comma separated list.")
     chime_parser.set_defaults(sender_func=chime_sender)
+
+    # Zoho Cliq
+    cliq_parser = subparsers.add_parser(
+        name="cliq", description="Send a Cliq message before and after function " +
+                                 "execution, with start and end status (successfully or crashed).")
+    cliq_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your Cliq channel/bot.")
+    cliq_parser.add_argument(
+        "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
+        help="Optional user ids to notify, as comma seperated list.")
+    cliq_parser.set_defaults(sender_func=cliq_sender)
 
     # Desktop
     desktop_parser = subparsers.add_parser(
