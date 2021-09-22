@@ -22,7 +22,7 @@ def desktop_sender(title: str = "knockknock"):
             try:
                 from win10toast import ToastNotifier
             except ImportError as err:
-                print('Error: to use Windows Desktop Notifications, you need to install `win10toast` first. Please run `pip install win10toast==0.9`.')
+                raise ImportError('Error: to use Windows Desktop Notifications, you need to install `win10toast` first. Please run `pip install win10toast==0.9`.')
 
             toaster = ToastNotifier()
             toaster.show_toast(title,
