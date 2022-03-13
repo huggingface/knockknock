@@ -42,7 +42,9 @@ def knockknock(config_path: str = "./", config_name: str = "knockknock.ini"):
     """
     config_file = os.path.join(config_path, config_name)
     if not os.path.isfile(config_file):
-        raise Exception(f'{config_file} is not a valid config file path')
+        warnings.warn(
+            f'The config file {config_file} is not existed. Knockknock would not send message.'
+        )
 
     # read the config file
     sender_config = configparser.ConfigParser()
