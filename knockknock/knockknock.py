@@ -84,13 +84,3 @@ def knockknock(config_path: str = "./", config_name: str = "knockknock.ini"):
         else:
             return func
     return wrap_knock
-
-
-if __name__ == '__main__':
-    @knockknock(config_name='test.ini')
-    def train_your_model(your_nicest_parameters):
-        import time
-        time.sleep(10)
-        return {'loss': 0.9}  # Optional return value
-
-    train_your_model(None)
