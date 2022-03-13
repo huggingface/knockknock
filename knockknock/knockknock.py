@@ -57,12 +57,13 @@ def knockknock(config_path: str = "./", config_name: str = "knockknock.ini"):
             sender_class_name = sender_section.pop('sender', None)
             if sender_class_name not in SENDER_DICT:
                 raise ValueError(
-                    f'The sender type {sender_class_name} defined in the config file is invalid in'
-                    + f' ({" ".join(SENDER_DICT.keys())}).'
+                    f'The sender type `{sender_class_name}` defined in the config file'
+                    + f' {config_file} is invalid.'
+                    + f' Support sender types: {", ".join(SENDER_DICT.keys())}.'
                 )
 
             # set notification parameters
-            do_notification = sender_section.pop('notification', True)
+            do_notification = eval(sender_section.pop('notification', 'True'))
             sender_class = SENDER_DICT[sender_class_name]
 
             # special keys pop out in above
