@@ -36,7 +36,10 @@ def knockknock(config_path: str = "./", config_name: str = "knockknock.ini"):
     """
     A general decorator reading the config file and wrapping the function to according sender.
 
-    `config_file`: str
+    `config_path`: str
+        A config folder contains your knockknock config file.
+
+    `config_name`: str
         A config file with sender keys in `SENDER_DICT` as its section name and set the sender
         parameters as passed values.
     """
