@@ -40,40 +40,40 @@ def knockknock(config_path: str = "./", config_name: str = "knockknock.ini"):
         A config file with sender keys in `SENDER_DICT` as its section name and set the sender
         parameters as passed values.
     """
-    config_file = os.path.join(config_path, config_name)
-    if not os.path.isfile(config_file):
-        warnings.warn(
-            f'The config file {config_file} is not existed. Knockknock would not send message.'
-        )
-
-    # read the config file
-    sender_config = configparser.ConfigParser()
-    sender_config.read(config_file)
-
-    # here we only select the `knockknock` section inside the config file as valid sender setting
-    sender_class = None
-    sender_param = {}
     do_notification = False
-    if 'knockknock' in sender_config:
-        sender_section = dict(sender_config['knockknock'])
+    config_file = os.path.join(config_path, config_name)
+    if os.path.isfile(config_file):
+        # read the config file
+        sender_config = configparser.ConfigParser()
+        sender_config.read(config_file)
 
-        # get sender class
-        sender_class_name = sender_section.pop('sender', None)
-        if sender_class_name not in SENDER_DICT:
-            raise ValueError(
-                f'The sender type {sender_class_name} defined in the config file is invalid in'
-                + f' ({" ".join(SENDER_DICT.keys())}).'
+        # here we only select the `knockknock` section inside the config file as valid sender setting
+        sender_class = None
+        sender_param = {}
+        if 'knockknock' in sender_config:
+            sender_section = dict(sender_config['knockknock'])
+
+            # get sender class
+            sender_class_name = sender_section.pop('sender', None)
+            if sender_class_name not in SENDER_DICT:
+                raise ValueError(
+                    f'The sender type {sender_class_name} defined in the config file is invalid in'
+                    + f' ({" ".join(SENDER_DICT.keys())}).'
+                )
+
+            # set notification parameters
+            do_notification = sender_section.pop('notification', True)
+            sender_class = SENDER_DICT[sender_class_name]
+
+            # special keys pop out in above
+            sender_param = sender_section
+        else:
+            warnings.warn(
+                f'The config file {config_file} is empty. Knockknock would not send message.'
             )
-
-        # set notification parameters
-        do_notification = sender_section.pop('notification', True)
-        sender_class = SENDER_DICT[sender_class_name]
-
-        # special keys pop out in above
-        sender_param = sender_section
     else:
         warnings.warn(
-            f'The config file {config_file} is empty. Knockknock would not send message.'
+            f'The config file {config_file} is not existed. Knockknock would not send message.'
         )
 
     def wrap_knock(func):
