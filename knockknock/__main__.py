@@ -12,7 +12,8 @@ from knockknock import (chime_sender,
                         sms_sender,
                         teams_sender,
                         telegram_sender,
-                        wechat_sender,)
+                        wechat_sender,
+                        feishu_sender)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -188,6 +189,15 @@ def main():
         "--user-mentions-mobile", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user phone numbers to notify (use '@all' for all group members), as comma seperated list.")
     wechat_parser.set_defaults(sender_func=wechat_sender)
+
+    # WeChat Work
+    feishu_parser = subparsers.add_parser(
+        name="feishu", description="Send a Feishu message before and after function " +
+        "execution, with start and end status (sucessfully or crashed).")
+    feishu_parser.add_argument(
+        "--webhook-url", type=str, required=True,
+        help="The webhook URL to access your Feishu chatroom")
+    feishu_parser.set_defaults(sender_func=feishu_sender)
 
     args, remaining_args = parser.parse_known_args()
     args = vars(args)
