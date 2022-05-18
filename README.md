@@ -36,6 +36,7 @@ There are currently *twelve* ways to setup notifications:
 |         [DingTalk](#dingtalk)         |                         [@wuutiing](https://github.com/wuutiing)                          |
 |       [RocketChat](#rocketchat)       |                            [@radao](https://github.com/radao)                             |
 |      [WeChat Work](#wechat-work)      |                             [@jcyk](https://github.com/jcyk)                              |
+|           [Feishu](#feishu)           |                             [@suxnju](https://github.com/suxnju)                           |
 
 
 ### Email
@@ -397,6 +398,28 @@ knockknock wechat \
 
 You can also specify an optional argument to tag specific people: `user-mentions=["<list_of_userids_you_want_to_tag>"]` and/or `user-mentions-mobile=["<list_of_phonenumbers_you_want_to_tag>"]`.
 
+### Feishu
+
+#### Python
+
+```python
+from knockknock import feishu_sender
+
+webhook_url = "<webhook_url_to_your_feishu_chatroom_robot>"
+@dingtalk_sender(webhook_url=webhook_url])
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+knockknock feishu \
+    --webhook-url <webhook_url_to_your_feishu_chatroom_robot> \
+    sleep 10
+```
 
 ## Note on distributed training
 
