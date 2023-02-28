@@ -22,7 +22,6 @@ def desktop_sender(title: str = "knockknock"):
         else:
             icon = "Info"
 
-
         ps_command = "\n".join([
             "Add-Type -AssemblyName System.Windows.Forms",
             "$global:balloon = New-Object System.Windows.Forms.NotifyIcon",
@@ -38,7 +37,7 @@ def desktop_sender(title: str = "knockknock"):
     
     def show_notification(text: str, title: str):
         # Check the OS
-        if platform.system() == "Darwin":  
+        if platform.system() == "Darwin":
             subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
         
         elif platform.system() == "Linux":
