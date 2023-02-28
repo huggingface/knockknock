@@ -37,7 +37,7 @@ def desktop_sender(title: str = "knockknock"):
     
     def show_notification(text: str, title: str):
         # Check the OS
-        if platform.system() == "Darwin":
+        if platform.system() == "Darwin":     
             subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
         
         elif platform.system() == "Linux":
@@ -130,12 +130,3 @@ def desktop_sender(title: str = "knockknock"):
         return wrapper_sender
 
     return decorator_sender
-
-if __name__ == "__main__":
-    @desktop_sender(title="Knockknock Desktop Notifier")
-    def train_your_nicest_model(your_nicest_parameters):
-        import time
-        time.sleep(10)
-        return {"loss": 0.9}
-
-    train_your_nicest_model(0)
