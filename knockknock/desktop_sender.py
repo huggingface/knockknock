@@ -42,7 +42,6 @@ def desktop_sender(title: str = "knockknock"):
         
         elif platform.system() == "Linux":
             if in_wsl():
-                print()
                 subprocess.run(["powershell.exe", "-EncodedCommand", encode_powershell_command(text, title)])
             else:   
                 subprocess.run(["notify-send", title, text])
