@@ -5,10 +5,35 @@ import functools
 import socket
 import subprocess
 import platform
+import base64
+from platform import uname
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def desktop_sender(title: str = "knockknock"):
+
+    def in_wsl() -> bool:
+        return 'microsoft-standard' in uname().release
+
+    def encode_powershell_command(text: str, title: str):
+
+        if text.startswith("Your training has crashed"):
+            icon = "Error"
+        else:
+            icon = "Info"
+
+        ps_command = "\n".join([
+            "Add-Type -AssemblyName System.Windows.Forms",
+            "$global:balloon = New-Object System.Windows.Forms.NotifyIcon",
+            "$path = (Get-Process -id $pid).Path",
+            "$balloon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($path)",
+            "$balloon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::" + icon,
+            "$balloon.BalloonTipTitle = \"" + title + "\"",
+            "$balloon.BalloonTipText = \"" + text + "\"",
+            "$balloon.Visible = $true",
+            "$balloon.ShowBalloonTip(5000)"
+        ])
+        return base64.b64encode(ps_command.encode("utf-16-le"))
     
     def show_notification(text: str, title: str):
         # Check the OS
@@ -16,7 +41,10 @@ def desktop_sender(title: str = "knockknock"):
             subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])
         
         elif platform.system() == "Linux":
-            subprocess.run(["notify-send", title, text])
+            if in_wsl():
+                subprocess.run(["powershell.exe", "-EncodedCommand", encode_powershell_command(text, title)])
+            else:   
+                subprocess.run(["notify-send", title, text])
         
         elif platform.system() == "Windows":
             try:
