@@ -9,7 +9,7 @@ import requests
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
+def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = [], username: str, icon_emoji: str):
     """
     Slack sender wrapper: execute func, send a Slack notification with the end status
     (sucessfully finished or crashed) at the end. Also send a Slack notification before
@@ -26,7 +26,7 @@ def slack_sender(webhook_url: str, channel: str, user_mentions: List[str] = []):
     """
 
     dump = {
-        "username": "Knock Knock",
+        "username": username,
         "channel": channel,
         "icon_emoji": ":clapper:",
     }
